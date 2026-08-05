@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net">
+  <diagram name="面談予約確認画面" id="PwCCJ8WOI3Xl3EbdifGC">
+    <mxGraphModel dx="622" dy="812" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="tFr1X61zBQtL8gMZDIuN-1" parent="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=24;fontStyle=1;fontColor=#1E293B;" value="面談予約一覧" vertex="1">
+          <mxGeometry height="40" width="160" x="350" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tFr1X61zBQtL8gMZDIuN-2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#E2E8F0;strokeWidth=1;arcSize=8;shadow=1;" value="" vertex="1">
+          <mxGeometry height="230" width="600" x="130" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="tFr1X61zBQtL8gMZDIuN-3" edge="1" parent="1" style="endArrow=none;html=1;strokeColor=#F1F5F9;strokeWidth=2;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="150" y="140" as="sourcePoint" />
+            <mxPoint x="710" y="140" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tFr1X61zBQtL8gMZDIuN-4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EBEBEB;fontColor=#000000;fontStyle=1;fontSize=12;strokeColor=none;arcSize=15;" value="土" vertex="1">
+          <mxGeometry height="22" width="28" x="150" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="tFr1X61zBQtL8gMZDIuN-5" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=16;fontStyle=1;fontColor=#0F172A;" value="2026年8月15日(土) 14:00 〜 15:00" vertex="1">
+          <mxGeometry height="30" width="350" x="188" y="104" as="geometry" />
+        </mxCell>
+        <mxCell id="tFr1X61zBQtL8gMZDIuN-6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;" value="" vertex="1">
+          <mxGeometry height="110" width="270" x="150" y="152" as="geometry" />
+        </mxCell>
+        <mxCell id="tFr1X61zBQtL8gMZDIuN-7" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#8B8B8B;" value="👤 面談担当者" vertex="1">
+          <mxGeometry height="20" width="120" x="162" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="tFr1X61zBQtL8gMZDIuN-8" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontStyle=1;fontSize=16;" value="田" vertex="1">
+          <mxGeometry height="42" width="42" x="162" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="tFr1X61zBQtL8gMZDIuN-9" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=15;fontStyle=1;fontColor=#1E293B;" value="田中 太郎" vertex="1">
+          <mxGeometry height="22" width="190" x="214" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="tFr1X61zBQtL8gMZDIuN-10" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;" value="" vertex="1">
+          <mxGeometry height="110" width="270" x="440" y="152" as="geometry" />
+        </mxCell>
+        <mxCell id="tFr1X61zBQtL8gMZDIuN-11" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#8B8B8B;" value="📝 面談内容" vertex="1">
+          <mxGeometry height="20" width="120" x="452" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="tFr1X61zBQtL8gMZDIuN-12" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#1E293B;" value="履歴書・職務経歴書の添削" vertex="1">
+          <mxGeometry height="22" width="246" x="452" y="186" as="geometry" />
+        </mxCell>
+        <mxCell id="tFr1X61zBQtL8gMZDIuN-13" parent="1" style="text;html=1;align=left;verticalAlign=top;fontSize=11;fontColor=#475569;whiteSpace=wrap;" value="一度書き直したものを改めて添削してほしいです。" vertex="1">
+          <mxGeometry height="45" width="246" x="452" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="tFr1X61zBQtL8gMZDIuN-14" edge="1" parent="1" style="endArrow=none;html=1;strokeColor=#E2E8F0;strokeWidth=1;dashed=1;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="150" y="272" as="sourcePoint" />
+            <mxPoint x="710" y="272" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tFr1X61zBQtL8gMZDIuN-15" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#EF4444;fontStyle=1;fontSize=12;strokeColor=#FCA5A5;arcSize=10;" value="予約を取り消す" vertex="1">
+          <mxGeometry height="30" width="120" x="590" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="tFr1X61zBQtL8gMZDIuN-16" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#E2E8F0;strokeWidth=1;arcSize=8;shadow=1;" value="" vertex="1">
+          <mxGeometry height="230" width="600" x="130" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="tFr1X61zBQtL8gMZDIuN-17" edge="1" parent="1" style="endArrow=none;html=1;strokeColor=#F1F5F9;strokeWidth=2;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="150" y="390" as="sourcePoint" />
+            <mxPoint x="710" y="390" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tFr1X61zBQtL8gMZDIuN-18" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EBEBEB;fontColor=#000000;fontStyle=1;fontSize=12;strokeColor=none;arcSize=15;" value="月" vertex="1">
+          <mxGeometry height="22" width="28" x="150" y="358" as="geometry" />
+        </mxCell>
+        <mxCell id="tFr1X61zBQtL8gMZDIuN-19" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=16;fontStyle=1;fontColor=#0F172A;" value="2026年8月17日(月) 10:30 〜 11:00" vertex="1">
+          <mxGeometry height="30" width="350" x="188" y="354" as="geometry" />
+        </mxCell>
+        <mxCell id="tFr1X61zBQtL8gMZDIuN-20" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;" value="" vertex="1">
+          <mxGeometry height="110" width="270" x="150" y="402" as="geometry" />
+        </mxCell>
+        <mxCell id="tFr1X61zBQtL8gMZDIuN-21" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#8B8B8B;" value="👤 面談担当者" vertex="1">
+          <mxGeometry height="20" width="120" x="162" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="tFr1X61zBQtL8gMZDIuN-22" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontStyle=1;fontSize=16;" value="佐" vertex="1">
+          <mxGeometry height="42" width="42" x="162" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="tFr1X61zBQtL8gMZDIuN-23" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=15;fontStyle=1;fontColor=#1E293B;" value="佐藤 花子" vertex="1">
+          <mxGeometry height="22" width="190" x="214" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="tFr1X61zBQtL8gMZDIuN-24" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;" value="" vertex="1">
+          <mxGeometry height="110" width="270" x="440" y="402" as="geometry" />
+        </mxCell>
+        <mxCell id="tFr1X61zBQtL8gMZDIuN-25" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#8B8B8B;" value="📝 面談内容" vertex="1">
+          <mxGeometry height="20" width="120" x="452" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="tFr1X61zBQtL8gMZDIuN-26" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#1E293B;" value="面接練習" vertex="1">
+          <mxGeometry height="22" width="246" x="452" y="436" as="geometry" />
+        </mxCell>
+        <mxCell id="tFr1X61zBQtL8gMZDIuN-27" parent="1" style="text;html=1;align=left;verticalAlign=top;fontSize=11;fontColor=#475569;whiteSpace=wrap;" value="面接に向けて想定質問の洗い出しや練習をしたいです。" vertex="1">
+          <mxGeometry height="45" width="246" x="452" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="tFr1X61zBQtL8gMZDIuN-28" edge="1" parent="1" style="endArrow=none;html=1;strokeColor=#E2E8F0;strokeWidth=1;dashed=1;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="150" y="522" as="sourcePoint" />
+            <mxPoint x="710" y="522" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tFr1X61zBQtL8gMZDIuN-29" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontColor=#EF4444;fontStyle=1;fontSize=12;strokeColor=#FCA5A5;arcSize=10;" value="予約を取り消す" vertex="1">
+          <mxGeometry height="30" width="120" x="590" y="530" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
