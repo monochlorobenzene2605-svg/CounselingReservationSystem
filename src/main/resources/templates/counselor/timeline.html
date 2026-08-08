@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>相談員 稼働・予約状況管理</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            line-height: 1.5;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* ヘッダー＆日付切り替え */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .header h1 {
+            font-size: 1.4rem;
+            color: #1e293b;
+        }
+        .date-selector {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .date-selector input[type="date"] {
+            padding: 8px 12px;
+            font-size: 1rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            outline: none;
+        }
+
+        /* 凡例 */
+        .legend {
+            display: flex;
+            gap: 16px;
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+        .dot-available { background-color: #eff6ff; border: 1px dashed #3b82f6; }
+        .dot-booked { background-color: #d1fae5; border: 1px solid #10b981; }
+        .dot-unavailable { background-color: #f1f5f9; border: 1px solid #cbd5e1; }
+
+        /* タイムラインコンテナ */
+        .timeline-card {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        /* テーブルスタイル */
+        .timeline-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+        .timeline-table th, .timeline-table td {
+            border: 1px solid #e2e8f0;
+            text-align: center;
+            padding: 10px 4px;
+        }
+        .timeline-table th {
+            background-color: #f8fafc;
+            font-size: 0.85rem;
+            color: #475569;
+            font-weight: 600;
+        }
+        .counselor-col {
+            width: 220px;
+            text-align: left !important;
+            padding-left: 12px !important;
+            background-color: #ffffff;
+            position: sticky;
+            left: 0;
+            z-index: 2;
+        }
+
+        .counselor-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #005ea6;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        .counselor-name {
+            font-size: 0.95rem;
+            font-weight: bold;
+            color: #1e293b;
+        }
+        .counselor-role {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        /* セルのステータススタイル */
+        .slot-cell {
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.8rem;
+            height: 60px;
+            position: relative;
+        }
+
+        /* 予約受付中（空き）スロット */
+        .slot-available {
+            background-color: #eff6ff;
+            color: #2563eb;
+        }
+        .slot-available:hover {
+            background-color: #dbeafe;
+            font-weight: bold;
+        }
+        .slot-available::after {
+            content: "受付中\a(クリックで不可設定)";
+            white-space: pre-wrap;
+            font-size: 0.7rem;
+        }
+
+        /* 予約済みスロット */
+        .slot-booked {
+            background-color: #ecfdf5;
+            color: #047857;
+            font-weight: bold;
+            border: 2px solid #10b981 !important;
+        }
+        .slot-booked:hover {
+            background-color: #d1fae5;
+        }
+        .slot-booked::after {
+            content: "📅 予約あり\a(クリックで確認)";
+            white-space: pre-wrap;
+            font-size: 0.75rem;
+        }
+
+        /* 面談不可（登録済み）スロット */
+        .slot-unavailable {
+            background-color: #f1f5f9;
+            color: #94a3b8;
+        }
+        .slot-unavailable:hover {
+            background-color: #e2e8f0;
+            color: #64748b;
+        }
+        .slot-unavailable::after {
+            content: "✕ 面談不可\a(クリックで解除)";
+            white-space: pre-wrap;
+            font-size: 0.7rem;
+        }
+
+        /* モーダルダイアログ */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal {
+            background: #fff;
+            padding: 24px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 480px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 16px;
+            color: #0f172a;
+        }
+        .info-group {
+            margin-bottom: 12px;
+        }
+        .info-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #64748b;
+            margin-bottom: 2px;
+        }
+        .info-group div {
+            font-size: 0.95rem;
+            color: #1e293b;
+            background: #f8fafc;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: none;
+        }
+        .btn-close { background-color: #f1f5f9; color: #475569; }
+        .btn-close:hover { background-color: #e2e8f0; }
+        .btn-cancel-booking { background-color: #dc2626; color: #fff; }
+        .btn-cancel-booking:hover { background-color: #b91c1c; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- ヘッダーエリア -->
+    <header class="header">
+        <h1>稼働・予約状況管理</h1>
+        <div class="date-selector">
+            <label for="date-picker" style="font-size: 0.9rem; font-weight: bold;">対象日:</label>
+            <input type="date" id="date-picker" value="2026-08-04">
+        </div>
+        <div class="legend">
+            <div class="legend-item"><span class="legend-dot dot-available"></span> 受付中 (空き)</div>
+            <div class="legend-item"><span class="legend-dot dot-booked"></span> 予約あり</div>
+            <div class="legend-item"><span class="legend-dot dot-unavailable"></span> 面談不可</div>
+        </div>
+    </header>
+
+    <!-- タイムラインエリア（相談員自身の1行のみ） -->
+    <main class="timeline-card">
+        <table class="timeline-table">
+            <thead>
+                <tr>
+                    <th class="counselor-col">担当相談員</th>
+                    <th>09:00</th>
+                    <th>10:00</th>
+                    <th>11:00</th>
+                    <th>13:00</th>
+                    <th>14:00</th>
+                    <th>15:00</th>
+                    <th>16:00</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <!-- ログイン中の相談員プロフィール情報 -->
+                    <td class="counselor-col">
+                        <div class="counselor-info">
+                            <div class="avatar">田</div>
+                            <div>
+                                <div class="counselor-name">田中 太郎</div>
+                                <div class="counselor-role">キャリアコンサルタント</div>
+                            </div>
+                        </div>
+                    </td>
+
+                    <!-- 各時間スロット -->
+                    <td class="slot-cell slot-unavailable" onclick="toggleStatus(this, '09:00')"></td>
+                    <td class="slot-cell slot-available" onclick="toggleStatus(this, '10:00')"></td>
+                    <td class="slot-cell slot-available" onclick="toggleStatus(this, '11:00')"></td>
+                    <td class="slot-cell slot-available" onclick="toggleStatus(this, '13:00')"></td>
+                    <td class="slot-cell slot-booked" onclick="openBookingDetail('14:00', '山田 太郎', '職務経歴書の添削と面接対策について')"></td>
+                    <td class="slot-cell slot-available" onclick="toggleStatus(this, '15:00')"></td>
+                    <td class="slot-cell slot-available" onclick="toggleStatus(this, '16:00')"></td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+</div>
+
+<!-- 予約詳細確認モーダル -->
+<div class="modal-overlay" id="detail-modal">
+    <div class="modal">
+        <div class="modal-title">予約内容の確認</div>
+        <div class="info-group">
+            <label>日時</label>
+            <div id="modal-time-val">-</div>
+        </div>
+        <div class="info-group">
+            <label>相談者（受講者）名</label>
+            <div id="modal-user-val">-</div>
+        </div>
+        <div class="info-group">
+            <label>相談内容</label>
+            <div id="modal-topic-val" style="min-height: 60px;">-</div>
+        </div>
+        <div class="modal-actions">
+            <button type="button" class="btn btn-close" onclick="closeModal()">閉じる</button>
+            <button type="button" class="btn btn-cancel-booking" onclick="cancelBooking()">予約取り消し</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentDetailSlot = null;
+
+    // 「受付中」と「面談不可」の状態切り替え機能
+    function toggleStatus(cell, time) {
+        if (cell.classList.contains('slot-available')) {
+            cell.classList.remove('slot-available');
+            cell.classList.add('slot-unavailable');
+        } else if (cell.classList.contains('slot-unavailable')) {
+            cell.classList.remove('slot-unavailable');
+            cell.classList.add('slot-available');
+        }
+    }
+
+    // 「予約あり」セルクリック時の詳細モーダル表示機能
+    function openBookingDetail(time, userName, topic) {
+        const dateVal = document.getElementById('date-picker').value;
+        document.getElementById('modal-time-val').textContent = `${dateVal}  ${time} 〜 ${parseInt(time)+1}:00`;
+        document.getElementById('modal-user-val').textContent = userName;
+        document.getElementById('modal-topic-val').textContent = topic;
+        
+        currentDetailSlot = time;
+        document.getElementById('detail-modal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('detail-modal').style.display = 'none';
+    }
+
+    function cancelBooking() {
+        if (confirm('この予約を取り消しますか？\n相談者宛にキャンセル通知メールが送られます。')) {
+            alert('予約をキャンセルしました。');
+            closeModal();
+            location.reload();
+        }
+    }
+</script>
+
+</body>
+</html>
