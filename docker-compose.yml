@@ -1,0 +1,21 @@
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql_test
+
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: counseling-reservation-system-db
+      MYSQL_USER: user1
+      MYSQL_PASSWORD: userpass
+
+    ports:
+      - "3306:3306"
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
