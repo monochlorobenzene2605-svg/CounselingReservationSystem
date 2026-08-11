@@ -18,6 +18,4 @@ spring:
       data-location: 
         - classpath:/sql/users.sql
         - classpath:/sql/slot_templates.sql
-        - classpath:/sql/unavailable_slots.sql
-        - classpath:/sql/reservations.sql
 
