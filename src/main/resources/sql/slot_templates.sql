@@ -1,4 +1,4 @@
-INSERT IGNORE INTO slot_templates(period_no, start_time, end_time) VALUES
+INSERT IGNORE INTO slot_template(period_no, start_time, end_time) VALUES
 (1, '09:00:00', '10:00:00'),
 (2, '10:00:00', '11:00:00'),
 (3, '11:00:00', '12:00:00'),

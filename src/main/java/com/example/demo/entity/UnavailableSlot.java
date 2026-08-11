@@ -18,14 +18,14 @@ import java.time.LocalDate;
 
 @Entity
 @Table(
-    name = "unavailable_slots",
+    name = "unavailable_slot",
     uniqueConstraints = {
-        @UniqueConstraint{
+        @UniqueConstraint(
             columnNames = {"counselor_id", "date", "slot_template_id"}
-        }
+        )
     }
 )
-public class UnavailableSlots {
+public class UnavailableSlot {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
@@ -44,10 +44,10 @@ public class UnavailableSlots {
     @Getter @Setter
     private SlotTemplate slotTemplate; // コマ
 
-    public Reservation(
+    public UnavailableSlots(
             User counselor,
             LocalDate date,
-            SlotTemplate slotTemplate,
+            SlotTemplate slotTemplate
     ) {
         this.counselor = counselor;
         this.date = date;

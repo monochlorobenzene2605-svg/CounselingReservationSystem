@@ -1,10 +1,10 @@
 <mxfile host="app.diagrams.net">
   <diagram name="ER Diagram" id="PTzop2LMNuMyozqLX-LE">
-    <mxGraphModel dx="1414" dy="825" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1093" dy="817" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="4xatjwad6k-gffghm85P-1" parent="1" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;styleParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=1;fontStyle=1;" value="users&#xa;(受講者/相談員)" vertex="1">
+        <mxCell id="4xatjwad6k-gffghm85P-1" parent="1" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;styleParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=1;fontStyle=1;" value="user&lt;br&gt;(受講者/相談員)" vertex="1">
           <mxGeometry height="150" width="180" x="80" y="80" as="geometry" />
         </mxCell>
         <mxCell id="4xatjwad6k-gffghm85P-2" parent="4xatjwad6k-gffghm85P-1" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=10;overflow=hidden;rotatable=0;points=[];portConstraint=eastwest;fontStyle=5;" value="PK | id" vertex="1">
@@ -22,7 +22,7 @@
         <mxCell id="4xatjwad6k-gffghm85P-6" parent="4xatjwad6k-gffghm85P-1" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=10;overflow=hidden;rotatable=0;points=[];portConstraint=eastwest;" value="role [NN]" vertex="1">
           <mxGeometry height="24" width="180" y="126" as="geometry" />
         </mxCell>
-        <mxCell id="4xatjwad6k-gffghm85P-7" parent="1" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;styleParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=1;fontStyle=1;" value="slot_templates&lt;br&gt;(コマ定義)" vertex="1">
+        <mxCell id="4xatjwad6k-gffghm85P-7" parent="1" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;styleParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=1;fontStyle=1;" value="slot_template&lt;br&gt;(コマ定義)" vertex="1">
           <mxGeometry height="126" width="180" x="600" y="80" as="geometry" />
         </mxCell>
         <mxCell id="4xatjwad6k-gffghm85P-8" parent="4xatjwad6k-gffghm85P-7" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=10;overflow=hidden;rotatable=0;points=[];portConstraint=eastwest;fontStyle=5;" value="PK | id" vertex="1">
@@ -37,7 +37,7 @@
         <mxCell id="4xatjwad6k-gffghm85P-11" parent="4xatjwad6k-gffghm85P-7" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=10;overflow=hidden;rotatable=0;points=[];portConstraint=eastwest;" value="end_time [NN]" vertex="1">
           <mxGeometry height="24" width="180" y="102" as="geometry" />
         </mxCell>
-        <mxCell id="4xatjwad6k-gffghm85P-12" parent="1" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;styleParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=1;fontStyle=1;" value="reservations&lt;br&gt;(予約)" vertex="1">
+        <mxCell id="4xatjwad6k-gffghm85P-12" parent="1" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;styleParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=1;fontStyle=1;" value="reservation&lt;br&gt;(予約)" vertex="1">
           <mxGeometry height="198" width="220" x="320" y="300" as="geometry" />
         </mxCell>
         <mxCell id="4xatjwad6k-gffghm85P-13" parent="4xatjwad6k-gffghm85P-12" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=10;overflow=hidden;rotatable=0;points=[];portConstraint=eastwest;fontStyle=5;" value="PK | id" vertex="1">
@@ -79,7 +79,7 @@
         <mxCell id="4xatjwad6k-gffghm85P-21" parent="4xatjwad6k-gffghm85P-12" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=10;overflow=hidden;rotatable=0;points=[];portConstraint=eastwest;" value="details" vertex="1">
           <mxGeometry height="24" width="220" y="174" as="geometry" />
         </mxCell>
-        <mxCell id="4xatjwad6k-gffghm85P-22" parent="1" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;styleParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=1;fontStyle=1;" value="unavailable_slots&lt;br&gt;(不可コマ)" vertex="1">
+        <mxCell id="4xatjwad6k-gffghm85P-22" parent="1" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;styleParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=1;fontStyle=1;" value="unavailable_slot&lt;br&gt;(不可コマ)" vertex="1">
           <mxGeometry height="126" width="180" x="80" y="300" as="geometry" />
         </mxCell>
         <mxCell id="4xatjwad6k-gffghm85P-23" parent="4xatjwad6k-gffghm85P-22" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=10;spacingRight=10;overflow=hidden;rotatable=0;points=[];portConstraint=eastwest;fontStyle=5;" value="PK | id" vertex="1">
