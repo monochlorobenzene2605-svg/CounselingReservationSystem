@@ -9,8 +9,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.AccessLevel;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

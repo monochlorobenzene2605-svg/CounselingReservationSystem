@@ -13,10 +13,13 @@ import jakarta.persistence.UniqueConstraint;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AccessLevel;
 
 import java.time.LocalDate;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(
     name = "unavailable_slot",
     uniqueConstraints = {
