@@ -20,3 +20,8 @@ spring:
         - classpath:/sql/users.sql
         - classpath:/sql/slot_templates.sql
 
+# デバッグ用 TODO:リリーズ時に消す
+logging:
+  level:
+    org.springframework.web: DEBUG
+    org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping: TRACE

@@ -4,288 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>相談員 予約・稼働状況タイムライン</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
-            background-color: #f4f6f9;
-            color: #333;
-            line-height: 1.5;
-            padding: 20px;
-        }
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        /* ヘッダー＆日付切り替え */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #fff;
-            padding: 16px 24px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-        .header-title-area {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-        .header h1 {
-            font-size: 1.4rem;
-            color: #1e293b;
-        }
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .date-selector {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .date-selector input[type="date"] {
-            padding: 8px 12px;
-            font-size: 1rem;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            outline: none;
-        }
-
-        /* アクションボタン（予約一覧・ログアウト） */
-        .nav-btn {
-            padding: 8px 14px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            cursor: pointer;
-            text-decoration: none;
-            transition: background-color 0.2s, border-color 0.2s;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .btn-list {
-            background-color: #ffffff;
-            color: #3b82f6;
-            border: 1px solid #3b82f6;
-        }
-        .btn-list:hover {
-            background-color: #eff6ff;
-        }
-        .btn-logout {
-            background-color: #ffffff;
-            color: #64748b;
-            border: 1px solid #cbd5e1;
-        }
-        .btn-logout:hover {
-            background-color: #f1f5f9;
-            color: #0f172a;
-        }
-
-        /* 凡例 */
-        .legend {
-            display: flex;
-            gap: 16px;
-            font-size: 0.85rem;
-            color: #64748b;
-            width: 100%;
-            padding-top: 8px;
-            border-top: 1px solid #f1f5f9;
-        }
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .legend-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 3px;
-        }
-        .dot-available { background-color: #eff6ff; border: 1px dashed #3b82f6; }
-        .dot-booked { background-color: #cbd5e1; }
-        .dot-mine { background-color: #ef4444; }
-
-        /* タイムラインコンテナ */
-        .timeline-card {
-            background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            padding: 20px;
-            overflow-x: auto;
-        }
-
-        /* テーブルスタイル */
-        .timeline-table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 800px;
-        }
-        .timeline-table th, .timeline-table td {
-            border: 1px solid #e2e8f0;
-            text-align: center;
-            padding: 10px 4px;
-        }
-        .timeline-table th {
-            background-color: #f8fafc;
-            font-size: 0.85rem;
-            color: #475569;
-            font-weight: 600;
-        }
-        .counselor-col {
-            width: 180px;
-            text-align: left !important;
-            padding-left: 12px !important;
-            background-color: #ffffff;
-            position: sticky;
-            left: 0;
-            z-index: 2;
-        }
-
-        .counselor-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background-color: #e2e8f0;
-            color: #334155;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 0.9rem;
-        }
-        .counselor-name {
-            font-size: 0.95rem;
-            font-weight: bold;
-            color: #1e293b;
-        }
-        .counselor-role {
-            font-size: 0.75rem;
-            color: #64748b;
-        }
-
-        /* セルのステータススタイル */
-        .slot-cell {
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 0.8rem;
-            height: 52px;
-            position: relative;
-        }
-        /* 空きスロット */
-        .slot-available {
-            background-color: #eff6ff;
-            color: #2563eb;
-        }
-        .slot-available:hover {
-            background-color: #dbeafe;
-            font-weight: bold;
-        }
-        .slot-available::after {
-            content: "空き";
-        }
-
-        /* 予約済みスロット */
-        .slot-booked {
-            background-color: #e2e8f0;
-            color: #64748b;
-            cursor: not-allowed;
-        }
-        .slot-booked::after {
-            content: "予約済";
-        }
-
-        /* 確定直後の新規予約 */
-        .slot-mine {
-            background-color: #fee2e2;
-            color: #dc2626;
-            font-weight: bold;
-            cursor: not-allowed;
-        }
-        .slot-mine::after {
-            content: "ご予約";
-        }
-
-        /* モーダルダイアログ */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.4);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        .modal {
-            background: #fff;
-            padding: 24px;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 480px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-        }
-        .modal-title {
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin-bottom: 16px;
-            color: #0f172a;
-        }
-        .form-group {
-            margin-bottom: 14px;
-        }
-        .form-group label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: bold;
-            color: #475569;
-            margin-bottom: 4px;
-        }
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 8px 12px;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            font-size: 0.95rem;
-        }
-        .form-group input[readonly] {
-            background-color: #f1f5f9;
-            color: #64748b;
-        }
-        .modal-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        .btn {
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            cursor: pointer;
-            border: none;
-        }
-        .btn-cancel { background-color: #f1f5f9; color: #475569; }
-        .btn-cancel:hover { background-color: #e2e8f0; }
-        .btn-submit { background-color: #2563eb; color: #fff; }
-        .btn-submit:hover { background-color: #1d4ed8; }
-    </style>
+<script src="https://unpkg.com/htmx.org@1.9.10"></script>
+<link th:href="@{/style/student_timeline.css}" href="../../static/style/student_timeline.css" rel="stylesheet">
 </head>
 <body>
 
@@ -296,20 +16,33 @@
             <h1>相談員 稼働状況・予約</h1>
         </div>
 
-        <div class="header-actions">
-            <div class="date-selector">
-                <label for="date-picker" style="font-size: 0.9rem; font-weight: bold;">対象日:</label>
-                <input type="date" id="date-picker" value="2026-08-04">
+<div class="header-actions">
+            <!-- Thymeleafでログインユーザー名を表示 -->
+            <div class="user-info">
+                <span class="user-info-label">ログイン:</span>
+                <!-- 例1: SecutiryUtilやModelからの名前表示 -->
+                <span th:text="${userName}">山田 太郎</span>
+                
+                <!-- 例2: Spring Security 属性を直接使う場合 -->
+                <!-- <span sec:authentication="principal.fullName">山田 太郎</span> -->
             </div>
-            <!-- 追加：予約一覧ページリンク -->
-            <a href="/reservations" class="nav-btn btn-list">予約一覧</a>
-            <!-- 追加：ログアウトボタン -->
+<div class="date-selector">
+    <label for="date-picker" style="font-size: 0.9rem; font-weight: bold;">対象日:</label>
+    
+    <!-- hx-get を "/timeline" に設定 -->
+    <input type="date" id="date-picker" name="date" value="2026-08-04"
+           hx-get="/timeline" 
+           hx-trigger="change" 
+           hx-target="#timeline-content"
+           hx-push-url="true">
+</div>
+            <a th:href="@{/reservations}" class="nav-btn btn-list">予約一覧</a>
             <button class="nav-btn btn-logout" onclick="handleLogout()">ログアウト</button>
         </div>
 
         <div class="legend">
             <div class="legend-item"><span class="legend-dot dot-available"></span> 予約可能</div>
-            <div class="legend-item"><span class="legend-dot dot-booked"></span> 予約済</div>
+            <div class="legend-item"><span class="legend-dot dot-booked"></span> 予約済・面談不可</div>
             <div class="legend-item"><span class="legend-dot dot-mine"></span> あなたの予約</div>
         </div>
     </header>
@@ -320,6 +53,7 @@
             <thead>
                 <tr>
                     <th class="counselor-col">相談員</th>
+                    <!-- TODO: thymeleafで生成するように変更-->
                     <th>09:00</th>
                     <th>10:00</th>
                     <th>11:00</th>
@@ -330,17 +64,19 @@
                 </tr>
             </thead>
             <tbody id="timeline-body">
-                <!-- JavaScriptで動的生成されます -->
+                <!-- 現状JSで生成されているが、thymeleafで生成するように変更-->
             </tbody>
         </table>
     </main>
 </div>
 
-<!-- 予約申し込みモーダル -->
-<div class="modal-overlay" id="booking-modal">
+<!-- 予約申し込みモーダル（空きセルクリック時） -->
+<div class="modal-overlay" id="reserve-modal">
     <div class="modal">
-        <div class="modal-title">面談予約の申し込み</div>
-        <form id="booking-form">
+        <div class="modal-header">
+            <div class="modal-title">面談予約の申し込み</div>
+        </div>
+        <form id="reserve-form">
             <div class="form-group">
                 <label>担当相談員</label>
                 <input type="text" id="modal-counselor" readonly>
@@ -350,44 +86,96 @@
                 <input type="text" id="modal-time" readonly>
             </div>
             <div class="form-group">
-                <label for="user-name">お名前 <span style="color:red">*</span></label>
-                <input type="text" id="user-name" required placeholder="山田 太郎">
+                <!--TODO: 名前はthymeleafで生成するように変更-->
+                <label for="user-name">お名前 </label>
+                <input type="text" id="user-name" readonly value="山田 太郎" required>
             </div>
             <div class="form-group">
-                <label for="booking-topic">相談内容 <span style="color:red">*</span></label>
-                <textarea id="booking-topic" rows="3" required placeholder="例：キャリア相談、面接対策など"></textarea>
+                <label for="reserve-topic">相談内容の概要 <span style="color:red">*</span></label>
+                <input id="reserve-topic" required placeholder="例：転職活動における職務経歴書の添削について">
+            </div>
+            <div class="form-group">
+                <label for="reserve-detail">相談内容の詳細</label>
+                <textarea id="reserve-detail" rows="4" placeholder="相談内容の詳細を入力してください"></textarea>
             </div>
             <div class="modal-actions">
-                <button type="button" class="btn btn-cancel" onclick="closeModal()">キャンセル</button>
+                <button type="button" class="btn btn-cancel" onclick="closeReserveModal()">キャンセル</button>
                 <button type="submit" class="btn btn-submit">予約を確定する</button>
             </div>
         </form>
     </div>
 </div>
 
+<!-- 予約内容の確認モーダル（ご予約セルクリック時） -->
+<div class="modal-overlay" id="confirm-modal">
+    <div class="modal">
+        <div class="modal-header">
+            <div class="modal-title">予約内容の確認</div>
+            <span class="status-badge">予約確定</span>
+        </div>
+        <div class="form-group">
+            <label>担当相談員</label>
+            <div class="display-value" id="confirm-counselor">-</div>
+        </div>
+        <div class="form-group">
+            <label>日時</label>
+            <div class="display-value" id="confirm-time">-</div>
+        </div>
+        <div class="form-group">
+            <label>お名前</label>
+            <div class="display-value" id="confirm-user-name">-</div>
+        </div>
+        <div class="form-group">
+            <label>相談内容の概要</label>
+            <div class="display-value" id="confirm-topic">-</div>
+        </div>
+        <div class="form-group">
+            <label>相談内容の詳細</label>
+            <div class="display-box" id="confirm-detail">-</div>
+        </div>
+        <div class="modal-actions">
+            <button type="button" class="btn btn-cancel" onclick="closeConfirmModal()">閉じる</button>
+            <button type="button" class="btn btn-delete" onclick="handleCancelReservation()">予約をキャンセル</button>
+        </div>
+    </div>
+</div>
+
 <script>
     // サンプルデータ：相談員一覧
+    // TODO: 実際はDBから取得する想定
+    // TODO: avatarは名前から自動で生成
     const counselors = [
-        { id: 'c1', name: '田中 太郎', role: 'キャリアコンサルタント', avatar: '田' },
-        { id: 'c2', name: '佐藤 美咲', role: 'IT/技術スペシャリスト', avatar: '佐' },
-        { id: 'c3', name: '鈴木 健二', role: 'メンタルヘルスケア', avatar: '鈴' }
+        { id: 'c1', name: '田中 太郎',  avatar: '田' },
+        { id: 'c2', name: '佐藤 美咲', avatar: '佐' },
+        { id: 'c3', name: '鈴木 健二', avatar: '鈴' }
     ];
 
     // 時間枠定義
+    // TODO: 実際はDBから取得する想定
     const timeSlots = ['09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00'];
 
-    // サンプル初期予約データ (counselorId_timeSlot)
-    const initialBookings = new Set([
-        'c1_09:00', 'c1_14:00',
-        'c2_10:00', 'c2_11:00', 'c2_15:00',
-        'c3_13:00'
-    ]);
+    // 面談不可/予約済データ
+    // TODO: 実際はDBから取得する想定
+    const bookedSlots = new Set(['c1_09:00', 'c2_10:00', 'c2_11:00', 'c2_15:00', 'c3_13:00']);
+    const unavailableSlots = new Set(['c1_11:00', 'c1_13:00']);
 
-    // 現在選択中の情報
-    let selectedCounselor = null;
-    let selectedTime = null;
-    let activeCell = null;
+    // 自分の予約データマップ (キー: counselorId_time)
+    // TODO: 実際はDBから取得する想定
+    let myReservations = {
+        'c1_14:00': {
+            counselorId: 'c1',
+            time: '14:00',
+            userName: '山田 太郎',
+            topic: '職務経歴書の添削と面接対策について',
+            detail: 'IT業界への転職を希望しており、これまでの実績のアピール方法についてアドバイスをいただきたいです。また、当日の持ち物があれば教えてください。'
+        }
+    };
 
+    // 現在操作中の選択情報
+    let activeKey = null;
+
+    
+    
     // タイムライン描画関数
     function renderTimeline() {
         const tbody = document.getElementById('timeline-body');
@@ -404,7 +192,6 @@
                     <div class="avatar">${counselor.avatar}</div>
                     <div>
                         <div class="counselor-name">${counselor.name}</div>
-                        <div class="counselor-role">${counselor.role}</div>
                     </div>
                 </div>
             `;
@@ -415,11 +202,20 @@
                 const tdTime = document.createElement('td');
                 const key = `${counselor.id}_${time}`;
 
-                if (initialBookings.has(key)) {
+                if (myReservations[key]) {
+                    // 自分の予約
+                    tdTime.className = 'slot-cell slot-mine';
+                    tdTime.onclick = () => openConfirmModal(key);
+                } else if (unavailableSlots.has(key)) {
+                    // 面談不可
+                    tdTime.className = 'slot-cell slot-booked slot-unavailable';
+                } else if (bookedSlots.has(key)) {
+                    // 予約済
                     tdTime.className = 'slot-cell slot-booked';
                 } else {
+                    // 空き
                     tdTime.className = 'slot-cell slot-available';
-                    tdTime.onclick = () => openModal(counselor, time, tdTime, key);
+                    tdTime.onclick = () => openReserveModal(counselor, time, key);
                 }
 
                 tr.appendChild(tdTime);
@@ -429,52 +225,85 @@
         });
     }
 
-    // モーダルを開く
-    function openModal(counselor, time, cellElement, key) {
-        selectedCounselor = counselor;
-        selectedTime = time;
-        activeCell = cellElement;
-
+    // --- 予約申し込みモーダル制御 ---
+    function openReserveModal(counselor, time, key) {
+        activeKey = key;
         const dateVal = document.getElementById('date-picker').value;
-        document.getElementById('modal-counselor').value = `${counselor.name} (${counselor.role})`;
-        document.getElementById('modal-time').value = `${dateVal}  ${time} 〜`;
-        
-        document.getElementById('booking-modal').style.display = 'flex';
+        const endTime = getEndTime(time);
+
+        document.getElementById('modal-counselor').value = `${counselor.name}（${counselor.role}）`;
+        document.getElementById('modal-time').value = `${dateVal} ${time} 〜 ${endTime}`;
+        document.getElementById('reserve-topic').value = '';
+        document.getElementById('reserve-detail').value = '';
+
+        document.getElementById('reserve-modal').style.display = 'flex';
     }
 
-    // モーダルを閉じる
-    function closeModal() {
-        document.getElementById('booking-modal').style.display = 'none';
-        document.getElementById('booking-form').reset();
+    function closeReserveModal() {
+        document.getElementById('reserve-modal').style.display = 'none';
+        document.getElementById('reserve-form').reset();
+        activeKey = null;
     }
 
-    // 予約送信イベントハンドラ
-    document.getElementById('booking-form').addEventListener('submit', function(e) {
+    document.getElementById('reserve-form').addEventListener('submit', function(e) {
         e.preventDefault();
-        
+
+        const [counselorId, time] = activeKey.split('_');
         const userName = document.getElementById('user-name').value;
-        const topic = document.getElementById('booking-topic').value;
+        const topic = document.getElementById('reserve-topic').value;
+        const detail = document.getElementById('reserve-detail').value;
 
-        // セルの表示を更新（「ご予約」状態にする）
-        if (activeCell) {
-            activeCell.className = 'slot-cell slot-mine';
-            activeCell.onclick = null; // 再度クリック不可に
-        }
+        // データの登録
+        myReservations[activeKey] = { counselorId, time, userName, topic, detail };
 
-        alert(`${selectedCounselor.name} 様との面談予約が完了しました！\n\n日時: ${document.getElementById('modal-time').value}\n相談内容: ${topic}`);
-        
-        closeModal();
+        closeReserveModal();
+        renderTimeline();
     });
 
-    // ログアウト処理ハンドラ
+    // --- 予約確認モーダル制御 ---
+    function openConfirmModal(key) {
+        activeKey = key;
+        const res = myReservations[key];
+        const counselor = counselors.find(c => c.id === res.counselorId);
+        const dateVal = document.getElementById('date-picker').value;
+        const endTime = getEndTime(res.time);
+
+        document.getElementById('confirm-counselor').textContent = `${counselor.name}（${counselor.role}）`;
+        document.getElementById('confirm-time').textContent = `${dateVal} ${res.time} 〜 ${endTime}`;
+        document.getElementById('confirm-user-name').textContent = res.userName;
+        document.getElementById('confirm-topic').textContent = res.topic;
+        document.getElementById('confirm-detail').textContent = res.detail || '（詳細なし）';
+
+        document.getElementById('confirm-modal').style.display = 'flex';
+    }
+
+    function closeConfirmModal() {
+        document.getElementById('confirm-modal').style.display = 'none';
+        activeKey = null;
+    }
+
+    function handleCancelReservation() {
+        if (confirm('この面談予約をキャンセルしてもよろしいですか？')) {
+            delete myReservations[activeKey];
+            closeConfirmModal();
+            renderTimeline();
+        }
+    }
+
+    // 終了時刻算出ヘルパー (10:00 -> 11:00)
+    function getEndTime(startTimeStr) {
+        const [hour, min] = startTimeStr.split(':').map(Number);
+        return `${String(hour + 1).padStart(2, '0')}:${String(min).padStart(2, '0')}`;
+    }
+
+    // ログアウト処理
     function handleLogout() {
         if (confirm('ログアウトしますか？')) {
-            // ここに実際のログアウト処理（セッション破棄やログインページへの遷移）を実装します
             window.location.href = '/login';
         }
     }
 
-    // 初期起動
+    // 初期化
     renderTimeline();
 </script>
 
