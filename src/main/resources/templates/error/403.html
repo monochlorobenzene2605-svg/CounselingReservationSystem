@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>403 アクセスが拒否されました</title>
+	<link th:href="@{/style/error.css}" href="../../static/style/error.css" rel="stylesheet">
+    <style>
+       
+    </style>
+</head>
+<body>
+
+<div class="error-container">
+    <div class="error-icon">
+        <svg viewBox="0 0 24 24">
+            <path d="M11 15h2v2h-2zm0-8h2v6h-2zm1-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+        </svg>
+    </div>
+    <div class="error-code">403</div>
+    <h1 class="error-title">アクセスが拒否されました</h1>
+    <p class="error-message">
+        お探しのページにアクセスする権限がありません。<br>
+        入力したアドレスに間違いがないかご確認ください。
+    </p>
+    
+    <div class="error-actions">
+        <a href="javascript:history.back()" class="btn btn-secondary">前のページに戻る</a>
+        <a href="login" class="btn btn-primary">ログイン画面へ</a>
+    </div>
+</div>
+
+</body>
+</html>
