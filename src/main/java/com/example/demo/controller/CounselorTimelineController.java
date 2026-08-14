@@ -11,19 +11,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
 
-// TODO: 未ログイン時にログインページにリダイレクトするようにする
 @Controller
-public class StudentTimelineController {
+public class CounselorTimelineController {
     @Autowired
     private UserRepository userRepository;
     
-    @GetMapping("/student/timeline")
-    public String showStudentTimeline(Model model, Authentication auth) {
+    @GetMapping("/counselor/timeline")
+    public String showCounselorTimeline(Model model, Authentication auth) {
     	String userId = auth.getName();
     	Optional<User> user = userRepository.findByUserId(userId);
         String userName = user.map(User::getName).orElse("Unknown Name");
         model.addAttribute("userId", userId);
         model.addAttribute("userName", userName);
-        return "student/timeline"; 
+        return "counselor/timeline"; 
     }
 }

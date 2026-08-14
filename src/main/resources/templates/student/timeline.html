@@ -1,311 +1,262 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>相談員 予約・稼働状況タイムライン</title>
-<script src="https://unpkg.com/htmx.org@1.9.10"></script>
-<link th:href="@{/style/student_timeline.css}" href="../../static/style/student_timeline.css" rel="stylesheet">
+    <title>相談員 予約・稼働状況（受講者）</title>
+    <link th:href="@{/style/student/timeline.css}" href="../../static/style/student/timeline.css" rel="stylesheet">
 </head>
+
 <body>
 
-<div class="container">
-    <!-- ヘッダーエリア -->
-    <header class="header">
-        <div class="header-title-area">
-            <h1>相談員 稼働状況・予約</h1>
-        </div>
-
-<div class="header-actions">
-            <!-- Thymeleafでログインユーザー名を表示 -->
-            <div class="user-info">
-                <span class="user-info-label">ログイン:</span>
-                <!-- 例1: SecutiryUtilやModelからの名前表示 -->
-                <span th:text="${userName}">山田 太郎</span>
-                
-                <!-- 例2: Spring Security 属性を直接使う場合 -->
-                <!-- <span sec:authentication="principal.fullName">山田 太郎</span> -->
+    <div class="container">
+        <header class="header">
+            <div class="header-title-area">
+                <h1>相談員 稼働状況・予約</h1>
             </div>
-<div class="date-selector">
-    <label for="date-picker" style="font-size: 0.9rem; font-weight: bold;">対象日:</label>
-    
-    <!-- hx-get を "/timeline" に設定 -->
-    <input type="date" id="date-picker" name="date" value="2026-08-04"
-           hx-get="/timeline" 
-           hx-trigger="change" 
-           hx-target="#timeline-content"
-           hx-push-url="true">
-</div>
-            <a th:href="@{/reservations}" class="nav-btn btn-list">予約一覧</a>
-            <button class="nav-btn btn-logout" onclick="handleLogout()">ログアウト</button>
-        </div>
 
-        <div class="legend">
-            <div class="legend-item"><span class="legend-dot dot-available"></span> 予約可能</div>
-            <div class="legend-item"><span class="legend-dot dot-booked"></span> 予約済・面談不可</div>
-            <div class="legend-item"><span class="legend-dot dot-mine"></span> あなたの予約</div>
-        </div>
-    </header>
+            <div class="header-actions">
+                <div class="user-info">
+                    <span class="user-info-label">ログイン:</span>
+                    <span th:text="${userName}">山田 太郎</span>
+                </div>
+                <div class="date-selector">
+                    <label for="date-picker" style="font-size: 0.9rem; font-weight: bold;">対象日:</label>
+                    <input type="date" id="date-picker" name="date" value="2026-08-04">
+                </div>
+                <a th:href="@{/reservations}" class="nav-btn btn-list">予約一覧</a>
+                <form th:action="@{/logout}" method="post">
+                    <button class="nav-btn btn-logout" type="submit">ログアウト</button>
+                </form>
+            </div>
 
-    <!-- タイムラインエリア -->
-    <main class="timeline-card">
-        <table class="timeline-table">
-            <thead>
-                <tr>
-                    <th class="counselor-col">相談員</th>
-                    <!-- TODO: thymeleafで生成するように変更-->
-                    <th>09:00</th>
-                    <th>10:00</th>
-                    <th>11:00</th>
-                    <th>13:00</th>
-                    <th>14:00</th>
-                    <th>15:00</th>
-                    <th>16:00</th>
-                </tr>
-            </thead>
-            <tbody id="timeline-body">
-                <!-- 現状JSで生成されているが、thymeleafで生成するように変更-->
-            </tbody>
-        </table>
-    </main>
-</div>
+            <div class="legend">
+                <div class="legend-item"><span class="legend-dot dot-available"></span> 予約可能</div>
+                <div class="legend-item"><span class="legend-dot dot-mine"></span> あなたの予約</div>
+                <div class="legend-item"><span class="legend-dot dot-other-booked"></span> 他者の予約</div>
+                <div class="legend-item"><span class="legend-dot dot-unavailable"></span> 面談不可</div>
+            </div>
+        </header>
 
-<!-- 予約申し込みモーダル（空きセルクリック時） -->
-<div class="modal-overlay" id="reserve-modal">
-    <div class="modal">
-        <div class="modal-header">
-            <div class="modal-title">面談予約の申し込み</div>
+        <main class="timeline-card">
+            <table class="timeline-table">
+                <thead>
+                    <tr>
+                        <th class="counselor-col">相談員</th>
+                        <th>09:00</th>
+                        <th>10:00</th>
+                        <th>11:00</th>
+                        <th>13:00</th>
+                        <th>14:00</th>
+                        <th>15:00</th>
+                        <th>16:00</th>
+                    </tr>
+                </thead>
+                <tbody id="timeline-body">
+                </tbody>
+            </table>
+        </main>
+    </div>
+
+    <!-- 予約申し込みモーダル -->
+    <div class="modal-overlay" id="reserve-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">面談予約の申し込み</div>
+            </div>
+            <form id="reserve-form">
+                <div class="form-group">
+                    <label>担当相談員</label>
+                    <input type="text" id="modal-counselor" readonly>
+                </div>
+                <div class="form-group">
+                    <label>日時</label>
+                    <input type="text" id="modal-time" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="user-name">お名前</label>
+                    <input type="text" id="user-name" readonly value="山田 太郎">
+                </div>
+                <div class="form-group">
+                    <label for="reserve-topic">相談内容の概要 <span style="color:red">*</span></label>
+                    <input id="reserve-topic" required placeholder="例：面接対策について">
+                </div>
+                <div class="form-group">
+                    <label for="reserve-detail">相談内容の詳細</label>
+                    <textarea id="reserve-detail" rows="4" placeholder="詳細を入力してください"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-cancel" onclick="closeReserveModal()">キャンセル</button>
+                    <button type="submit" class="btn btn-submit">予約を確定する</button>
+                </div>
+            </form>
         </div>
-        <form id="reserve-form">
+    </div>
+
+    <!-- 自分の予約確認モーダル -->
+    <div class="modal-overlay" id="confirm-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">予約内容の確認</div>
+                <span class="status-badge">予約確定</span>
+            </div>
             <div class="form-group">
                 <label>担当相談員</label>
-                <input type="text" id="modal-counselor" readonly>
+                <div class="display-value" id="confirm-counselor">-</div>
             </div>
             <div class="form-group">
                 <label>日時</label>
-                <input type="text" id="modal-time" readonly>
+                <div class="display-value" id="confirm-time">-</div>
             </div>
             <div class="form-group">
-                <!--TODO: 名前はthymeleafで生成するように変更-->
-                <label for="user-name">お名前 </label>
-                <input type="text" id="user-name" readonly value="山田 太郎" required>
+                <label>お名前</label>
+                <div class="display-value" id="confirm-user-name">-</div>
             </div>
             <div class="form-group">
-                <label for="reserve-topic">相談内容の概要 <span style="color:red">*</span></label>
-                <input id="reserve-topic" required placeholder="例：転職活動における職務経歴書の添削について">
+                <label>相談内容の概要</label>
+                <div class="display-value" id="confirm-topic">-</div>
             </div>
             <div class="form-group">
-                <label for="reserve-detail">相談内容の詳細</label>
-                <textarea id="reserve-detail" rows="4" placeholder="相談内容の詳細を入力してください"></textarea>
+                <label>相談内容の詳細</label>
+                <div class="display-box" id="confirm-detail">-</div>
             </div>
             <div class="modal-actions">
-                <button type="button" class="btn btn-cancel" onclick="closeReserveModal()">キャンセル</button>
-                <button type="submit" class="btn btn-submit">予約を確定する</button>
+                <button type="button" class="btn btn-cancel" onclick="closeConfirmModal()">閉じる</button>
+                <button type="button" class="btn btn-delete" onclick="handleCancelReservation()">予約をキャンセル</button>
             </div>
-        </form>
-    </div>
-</div>
-
-<!-- 予約内容の確認モーダル（ご予約セルクリック時） -->
-<div class="modal-overlay" id="confirm-modal">
-    <div class="modal">
-        <div class="modal-header">
-            <div class="modal-title">予約内容の確認</div>
-            <span class="status-badge">予約確定</span>
-        </div>
-        <div class="form-group">
-            <label>担当相談員</label>
-            <div class="display-value" id="confirm-counselor">-</div>
-        </div>
-        <div class="form-group">
-            <label>日時</label>
-            <div class="display-value" id="confirm-time">-</div>
-        </div>
-        <div class="form-group">
-            <label>お名前</label>
-            <div class="display-value" id="confirm-user-name">-</div>
-        </div>
-        <div class="form-group">
-            <label>相談内容の概要</label>
-            <div class="display-value" id="confirm-topic">-</div>
-        </div>
-        <div class="form-group">
-            <label>相談内容の詳細</label>
-            <div class="display-box" id="confirm-detail">-</div>
-        </div>
-        <div class="modal-actions">
-            <button type="button" class="btn btn-cancel" onclick="closeConfirmModal()">閉じる</button>
-            <button type="button" class="btn btn-delete" onclick="handleCancelReservation()">予約をキャンセル</button>
         </div>
     </div>
-</div>
 
-<script>
-    // サンプルデータ：相談員一覧
-    // TODO: 実際はDBから取得する想定
-    // TODO: avatarは名前から自動で生成
-    const counselors = [
-        { id: 'c1', name: '田中 太郎',  avatar: '田' },
-        { id: 'c2', name: '佐藤 美咲', avatar: '佐' },
-        { id: 'c3', name: '鈴木 健二', avatar: '鈴' }
-    ];
+    <script>
+        const counselors = [
+            {id: 'c1', name: '田中 太郎', avatar: '田', role: 'キャリアコンサルタント'},
+            {id: 'c2', name: '佐藤 美咲', avatar: '佐', role: 'シニアアドバイザー'},
+            {id: 'c3', name: '鈴木 健二', avatar: '鈴', role: 'キャリアコンサルタント'}
+        ];
 
-    // 時間枠定義
-    // TODO: 実際はDBから取得する想定
-    const timeSlots = ['09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00'];
+        const timeSlots = ['09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00'];
 
-    // 面談不可/予約済データ
-    // TODO: 実際はDBから取得する想定
-    const bookedSlots = new Set(['c1_09:00', 'c2_10:00', 'c2_11:00', 'c2_15:00', 'c3_13:00']);
-    const unavailableSlots = new Set(['c1_11:00', 'c1_13:00']);
+        // 他者の予約
+        const otherBookedSlots = new Set(['c1_09:00', 'c2_10:00', 'c2_15:00', 'c3_13:00']);
 
-    // 自分の予約データマップ (キー: counselorId_time)
-    // TODO: 実際はDBから取得する想定
-    let myReservations = {
-        'c1_14:00': {
-            counselorId: 'c1',
-            time: '14:00',
-            userName: '山田 太郎',
-            topic: '職務経歴書の添削と面接対策について',
-            detail: 'IT業界への転職を希望しており、これまでの実績のアピール方法についてアドバイスをいただきたいです。また、当日の持ち物があれば教えてください。'
-        }
-    };
+        // 面談不可
+        const unavailableSlots = new Set(['c1_11:00', 'c2_11:00']);
 
-    // 現在操作中の選択情報
-    let activeKey = null;
+        // 自分の予約
+        let myReservations = {
+            'c1_14:00': {
+                counselorId: 'c1',
+                time: '14:00',
+                userName: '山田 太郎',
+                topic: '職務経歴書の添削と面接対策について',
+                detail: 'アピール方法についてアドバイスをいただきたいです。'
+            }
+        };
 
-    
-    
-    // タイムライン描画関数
-    function renderTimeline() {
-        const tbody = document.getElementById('timeline-body');
-        tbody.innerHTML = '';
+        let activeKey = null;
 
-        counselors.forEach(counselor => {
-            const tr = document.createElement('tr');
+        function renderTimeline() {
+            const tbody = document.getElementById('timeline-body');
+            tbody.innerHTML = '';
 
-            // 相談員情報セル
-            const tdCounselor = document.createElement('td');
-            tdCounselor.className = 'counselor-col';
-            tdCounselor.innerHTML = `
-                <div class="counselor-info">
-                    <div class="avatar">${counselor.avatar}</div>
-                    <div>
-                        <div class="counselor-name">${counselor.name}</div>
-                    </div>
-                </div>
-            `;
-            tr.appendChild(tdCounselor);
+            counselors.forEach(counselor => {
+                const tr = document.createElement('tr');
 
-            // 各時間枠セル
-            timeSlots.forEach(time => {
-                const tdTime = document.createElement('td');
-                const key = `${counselor.id}_${time}`;
+                const tdCounselor = document.createElement('td');
+                tdCounselor.className = 'counselor-col';
+                tdCounselor.innerHTML = `
+					<div class="counselor-info">
+						<div class="avatar">${counselor.avatar}</div>
+						<div><div class="counselor-name">${counselor.name}</div></div>
+					</div>
+				`;
+                tr.appendChild(tdCounselor);
 
-                if (myReservations[key]) {
-                    // 自分の予約
-                    tdTime.className = 'slot-cell slot-mine';
-                    tdTime.onclick = () => openConfirmModal(key);
-                } else if (unavailableSlots.has(key)) {
-                    // 面談不可
-                    tdTime.className = 'slot-cell slot-booked slot-unavailable';
-                } else if (bookedSlots.has(key)) {
-                    // 予約済
-                    tdTime.className = 'slot-cell slot-booked';
-                } else {
-                    // 空き
-                    tdTime.className = 'slot-cell slot-available';
-                    tdTime.onclick = () => openReserveModal(counselor, time, key);
-                }
+                timeSlots.forEach(time => {
+                    const tdTime = document.createElement('td');
+                    const key = `${counselor.id}_${time}`;
 
-                tr.appendChild(tdTime);
+                    if (myReservations[key]) {
+                        tdTime.className = 'slot-cell slot-mine';
+                        tdTime.onclick = () => openConfirmModal(key);
+                    } else if (otherBookedSlots.has(key)) {
+                        tdTime.className = 'slot-cell slot-other-booked';
+                    } else if (unavailableSlots.has(key)) {
+                        tdTime.className = 'slot-cell slot-unavailable';
+                    } else {
+                        tdTime.className = 'slot-cell slot-available';
+                        tdTime.onclick = () => openReserveModal(counselor, time, key);
+                    }
+
+                    tr.appendChild(tdTime);
+                });
+
+                tbody.appendChild(tr);
             });
+        }
 
-            tbody.appendChild(tr);
-        });
-    }
+        function openReserveModal(counselor, time, key) {
+            activeKey = key;
+            const dateVal = document.getElementById('date-picker').value;
+            document.getElementById('modal-counselor').value = counselor.name;
+            document.getElementById('modal-time').value = `${dateVal} ${time}`;
+            document.getElementById('reserve-topic').value = '';
+            document.getElementById('reserve-detail').value = '';
+            document.getElementById('reserve-modal').style.display = 'flex';
+        }
 
-    // --- 予約申し込みモーダル制御 ---
-    function openReserveModal(counselor, time, key) {
-        activeKey = key;
-        const dateVal = document.getElementById('date-picker').value;
-        const endTime = getEndTime(time);
+        function closeReserveModal() {
+            document.getElementById('reserve-modal').style.display = 'none';
+            activeKey = null;
+        }
 
-        document.getElementById('modal-counselor').value = `${counselor.name}（${counselor.role}）`;
-        document.getElementById('modal-time').value = `${dateVal} ${time} 〜 ${endTime}`;
-        document.getElementById('reserve-topic').value = '';
-        document.getElementById('reserve-detail').value = '';
-
-        document.getElementById('reserve-modal').style.display = 'flex';
-    }
-
-    function closeReserveModal() {
-        document.getElementById('reserve-modal').style.display = 'none';
-        document.getElementById('reserve-form').reset();
-        activeKey = null;
-    }
-
-    document.getElementById('reserve-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        const [counselorId, time] = activeKey.split('_');
-        const userName = document.getElementById('user-name').value;
-        const topic = document.getElementById('reserve-topic').value;
-        const detail = document.getElementById('reserve-detail').value;
-
-        // データの登録
-        myReservations[activeKey] = { counselorId, time, userName, topic, detail };
-
-        closeReserveModal();
-        renderTimeline();
-    });
-
-    // --- 予約確認モーダル制御 ---
-    function openConfirmModal(key) {
-        activeKey = key;
-        const res = myReservations[key];
-        const counselor = counselors.find(c => c.id === res.counselorId);
-        const dateVal = document.getElementById('date-picker').value;
-        const endTime = getEndTime(res.time);
-
-        document.getElementById('confirm-counselor').textContent = `${counselor.name}（${counselor.role}）`;
-        document.getElementById('confirm-time').textContent = `${dateVal} ${res.time} 〜 ${endTime}`;
-        document.getElementById('confirm-user-name').textContent = res.userName;
-        document.getElementById('confirm-topic').textContent = res.topic;
-        document.getElementById('confirm-detail').textContent = res.detail || '（詳細なし）';
-
-        document.getElementById('confirm-modal').style.display = 'flex';
-    }
-
-    function closeConfirmModal() {
-        document.getElementById('confirm-modal').style.display = 'none';
-        activeKey = null;
-    }
-
-    function handleCancelReservation() {
-        if (confirm('この面談予約をキャンセルしてもよろしいですか？')) {
-            delete myReservations[activeKey];
-            closeConfirmModal();
+        document.getElementById('reserve-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const [counselorId, time] = activeKey.split('_');
+            myReservations[activeKey] = {
+                counselorId, time,
+                userName: document.getElementById('user-name').value,
+                topic: document.getElementById('reserve-topic').value,
+                detail: document.getElementById('reserve-detail').value
+            };
+            closeReserveModal();
             renderTimeline();
+        });
+
+        function openConfirmModal(key) {
+            activeKey = key;
+            const res = myReservations[key];
+            const counselor = counselors.find(c => c.id === res.counselorId);
+            const dateVal = document.getElementById('date-picker').value;
+
+            document.getElementById('confirm-counselor').textContent = counselor.name;
+            document.getElementById('confirm-time').textContent = `${dateVal} ${res.time}`;
+            document.getElementById('confirm-user-name').textContent = res.userName;
+            document.getElementById('confirm-topic').textContent = res.topic;
+            document.getElementById('confirm-detail').textContent = res.detail || '（なし）';
+            document.getElementById('confirm-modal').style.display = 'flex';
         }
-    }
 
-    // 終了時刻算出ヘルパー (10:00 -> 11:00)
-    function getEndTime(startTimeStr) {
-        const [hour, min] = startTimeStr.split(':').map(Number);
-        return `${String(hour + 1).padStart(2, '0')}:${String(min).padStart(2, '0')}`;
-    }
-
-    // ログアウト処理
-    function handleLogout() {
-        if (confirm('ログアウトしますか？')) {
-            window.location.href = '/login';
+        function closeConfirmModal() {
+            document.getElementById('confirm-modal').style.display = 'none';
+            activeKey = null;
         }
-    }
 
-    // 初期化
-    renderTimeline();
-</script>
+        function handleCancelReservation() {
+            if (confirm('予約をキャンセルしますか？')) {
+                delete myReservations[activeKey];
+                closeConfirmModal();
+                renderTimeline();
+            }
+        }
 
+        function handleLogout() {
+            if (confirm('ログアウトしますか？')) window.location.href = '/login';
+        }
+
+        renderTimeline();
+    </script>
 </body>
+
 </html>
