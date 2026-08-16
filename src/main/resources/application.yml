@@ -6,6 +6,7 @@ spring:
     username: root
     # password: ${DB_PASSWORD} TODO: 現状docker composeではなくeclipseからテストするためパスワードを直書きしている。docker composeでテストする場合はコメントアウトして、環境変数DB_PASSWORDを設定すること。
     password: password
+    # TODO: rootじゃなくてユーザー作る
 
   jpa:
     hibernate:

@@ -50,7 +50,7 @@ public class StudentTimelineController {
         List<SlotTemplate> slotTemplates = slotTemplateRepository.findAll();
         model.addAttribute("SlotTemplates", slotTemplates);
         
-        List<User> counselors = userRepository.findByRole();
+        List<User> counselors = userRepository.findAllByRole(User.Role.COUNSELOR);
         // TODO:NOW(2026-08-15) その日のタイムラインを表示するのを実装する
         // TimelineServiceを作って、予約情報を取得するようにする
         // また、TimelineDtoを作って、それをhtmlに渡すようにする

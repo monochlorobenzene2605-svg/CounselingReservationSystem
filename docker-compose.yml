@@ -6,7 +6,7 @@ services:
     container_name: mariadb
 
     environment:
-      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: counseling-reservation-system-db
       MYSQL_USER: user1
       MYSQL_PASSWORD: userpass
