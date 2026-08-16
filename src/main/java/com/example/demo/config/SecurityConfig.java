@@ -1,5 +1,8 @@
 package com.example.demo.config;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,6 +31,8 @@ public class SecurityConfig {
 				.formLogin(form -> form
 						.loginPage("/login")
 						.successHandler((req, res, auth) -> {
+                            String today = LocalDate.now()
+                                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
 							boolean isStudent = auth.getAuthorities()
 									.stream()
@@ -35,9 +40,9 @@ public class SecurityConfig {
 											.equals("ROLE_STUDENT"));
 
 							if (isStudent) {
-								res.sendRedirect("/student/timeline");
+								res.sendRedirect("/student/timeline" + "?date=" + today);
 							} else {
-								res.sendRedirect("/counselor/timeline");
+								res.sendRedirect("/counselor/timeline" + "?date=" + today);
 							}
 						}))
 				.logout(logout -> logout

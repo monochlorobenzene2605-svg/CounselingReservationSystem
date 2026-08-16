@@ -22,8 +22,15 @@
                     <span th:text="${userName}">山田 太郎</span>
                 </div>
                 <div class="date-selector">
-                    <label for="date-picker" style="font-size: 0.9rem; font-weight: bold;">対象日:</label>
-                    <input type="date" id="date-picker" name="date" value="2026-08-04">
+                    <form th:action="@{/student/timeline}" method="get">
+                        <label for="date-picker" style="font-size: 0.9rem; font-weight: bold;">対象日:</label>
+                        <input type="date" id="date-picker" name="dateString" th:value="${date}"
+                            onchange="this.form.submit()">
+                        <script>
+                            // 今日以前を選択できないようにする
+                            document.getElementById('date-picker').min = new Date().toISOString().split('T')[0];
+                        </script>
+                    </form>
                 </div>
                 <a th:href="@{/reservations}" class="nav-btn btn-list">予約一覧</a>
                 <form th:action="@{/logout}" method="post">
@@ -44,16 +51,22 @@
                 <thead>
                     <tr>
                         <th class="counselor-col">相談員</th>
-                        <th>09:00</th>
-                        <th>10:00</th>
-                        <th>11:00</th>
-                        <th>13:00</th>
-                        <th>14:00</th>
-                        <th>15:00</th>
-                        <th>16:00</th>
+                        <th th:each="slot : ${SlotTemplates}" th:text="${slot.startTime}">23:00</th>
                     </tr>
                 </thead>
                 <tbody id="timeline-body">
+                    <tr th:each="counselor : ${counselors}">
+                        <td class="counselor-col">
+                            <div class="counselor-info">
+                                <div class="avatar" th:text="${counselor.name.substring(0, 1)}">田</div>
+                                <div>
+                                    <div class="counselor-name" th:text="${counselor.name}">田中 太郎</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td th:each="slot : ${SlotTemplates}" th:id="${counselor.id + '_' + slot.startTime}"
+                            class="slot-cell slot-available"></td>
+                    </tr>
                 </tbody>
             </table>
         </main>
@@ -130,9 +143,9 @@
 
     <script>
         const counselors = [
-            {id: 'c1', name: '田中 太郎', avatar: '田', role: 'キャリアコンサルタント'},
-            {id: 'c2', name: '佐藤 美咲', avatar: '佐', role: 'シニアアドバイザー'},
-            {id: 'c3', name: '鈴木 健二', avatar: '鈴', role: 'キャリアコンサルタント'}
+            { id: 'c1', name: '田中 太郎', avatar: '田', role: 'キャリアコンサルタント' },
+            { id: 'c2', name: '佐藤 美咲', avatar: '佐', role: 'シニアアドバイザー' },
+            { id: 'c3', name: '鈴木 健二', avatar: '鈴', role: 'キャリアコンサルタント' }
         ];
 
         const timeSlots = ['09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00'];

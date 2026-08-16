@@ -10,6 +10,7 @@ import com.example.demo.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
+// ログイン処理
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService
