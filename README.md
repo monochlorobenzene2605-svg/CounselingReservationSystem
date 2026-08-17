@@ -80,7 +80,7 @@
 本アプリは
 - Spring Boot
 - Thymeleaf
-- MySQL
+- MariaDB
 
 を使用し作成しました
 

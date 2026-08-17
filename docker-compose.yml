@@ -1,9 +1,9 @@
 services:
 # TODO: springbootのコンテナの設定を追加する。environment:DB_PASSWORD=rootpassを忘れず
 # DB設定などについては.envなどに括りだし、.gitignoreに追加することでgithubに公開されないようにすることが望ましいが、今回はデプロイ手順を簡単にして手軽に手元で試してもらえるようにするため、あえて直書きしている。
-  mysql:
-    image: mysql:8
-    container_name: mysql_test
+  mariadb:
+    image: mariadb:11
+    container_name: mariadb
 
     environment:
       MYSQL_ROOT_PASSWORD: rootpass
@@ -15,9 +15,9 @@ services:
       - "3306:3306"
 
     volumes:
-      - mysql_data:/var/lib/mysql
+      - mariadb_data:/var/lib/mysql
 
     restart: unless-stopped
 
 volumes:
-  mysql_data:
+  mariadb_data:

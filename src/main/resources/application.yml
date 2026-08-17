@@ -2,10 +2,10 @@ spring:
   application:
     name: CounselingReservationSystem
   datasource:
-    url: jdbc:mysql://localhost:3306/counseling-reservation-system-db
+    url: jdbc:mariadb://localhost:3306/counseling-reservation-system-db?createDatabaseIfNotExist=true
     username: root
     # password: ${DB_PASSWORD} TODO: 現状docker composeではなくeclipseからテストするためパスワードを直書きしている。docker composeでテストする場合はコメントアウトして、環境変数DB_PASSWORDを設定すること。
-    password: rootpass
+    password: password
 
   jpa:
     hibernate:
@@ -20,7 +20,7 @@ spring:
         - classpath:/sql/users.sql
         - classpath:/sql/slot_templates.sql
 
-# デバッグ用 TODO:リリーズ時に消す
+# デバッグ用 TODO:リリース時に消す
 logging:
   level:
     org.springframework.web: DEBUG
