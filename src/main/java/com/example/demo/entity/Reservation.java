@@ -61,9 +61,9 @@ public class Reservation {
     @Getter @Setter
     private String summary; // 相談内容の概要
     
-    @Column(name = "details", columnDefinition = "TEXT")
+    @Column(name = "detail", columnDefinition = "TEXT")
     @Getter @Setter
-    private String details; // 相談内容の詳細
+    private String detail; // 相談内容の詳細
 
     public Reservation(
             User student,
@@ -84,9 +84,9 @@ public class Reservation {
             LocalDate date,
             SlotTemplate slotTemplate,
             String summary,
-            String details
+            String detail
     ) {
         this(student, counselor, date, slotTemplate, summary);
-        this.details = details;
+        this.detail = detail;
     }
 }
