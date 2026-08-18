@@ -17,6 +17,7 @@ import lombok.AccessLevel;
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
 	private Integer id;
 
     // 今回は値を変更することは考えないので、setterは作らない
