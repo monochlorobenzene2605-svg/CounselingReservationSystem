@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 public class SlotDto {
     private final LocalTime startTime;
     public enum Status {
-        Empty, Reserved, ReservedByMe, Unavailabled
+        Empty, Reserved, Mine, Unavailabled
     }
     private Status status = Status.Empty;
     private String summary = "summary";

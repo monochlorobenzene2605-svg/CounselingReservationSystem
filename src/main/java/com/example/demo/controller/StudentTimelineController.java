@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.demo.dto.SlotDto;
 import com.example.demo.dto.TimelineDto;
 import com.example.demo.entity.SlotTemplate;
 import com.example.demo.entity.User;
@@ -53,10 +54,12 @@ public class StudentTimelineController {
         model.addAttribute("date", date);
         
         List<SlotTemplate> slotTemplates = slotTemplateRepository.findAll();
-        model.addAttribute("SlotTemplates", slotTemplates);
+        model.addAttribute("slotTemplates", slotTemplates);
         
         List<TimelineDto> timelines = timelineService.createTimelines(user.orElseThrow(), date);
-        model.addAttribute(timelines);
+        model.addAttribute("timelines", timelines);
+
+        model.addAttribute("SlotStatus",SlotDto.Status.class); // html側からSlotStatus.Emptyみたいにenumにアクセスできるようにするため
         
         return "student/timeline"; 
     }

@@ -65,7 +65,7 @@ public class TimelineService {
                     slot.setStatus(SlotDto.Status.Reserved);
                     Boolean isMine = user.getId().equals(r.getStudent().getId());
                     if(isMine){
-                        slot.setStatus(SlotDto.Status.ReservedByMe);
+                        slot.setStatus(SlotDto.Status.Mine);
                         slot.setSummary(r.getSummary());
                         slot.setDetail(r.getDetail());
                     }
