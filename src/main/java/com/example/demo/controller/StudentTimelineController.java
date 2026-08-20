@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,7 +11,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.dto.SlotDto;
 import com.example.demo.dto.TimelineDto;
@@ -62,5 +66,22 @@ public class StudentTimelineController {
         model.addAttribute("SlotStatus",SlotDto.Status.class); // html側からSlotStatus.Emptyみたいにenumにアクセスできるようにするため
         
         return "student/timeline"; 
+    }
+    
+    @PostMapping("/reserve")
+    public String reservation(
+        RedirectAttributes redirectAttributes,
+        @RequestParam String date, @RequestParam String counselorName, @RequestParam String studentName, @RequestParam String summary, @RequestParam String detail)
+    {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime ldtDate = LocalDateTime.parse(date, formatter);
+        boolean isSuccess = timelineService.reserve(ldtDate, counselorName, studentName, summary, detail);
+
+        if(isSuccess){
+            redirectAttributes.addFlashAttribute("error");
+        } else {
+            redirectAttributes.addFlashAttribute("success");
+        }
+        return "redirect:student/timeline";
     }
 }

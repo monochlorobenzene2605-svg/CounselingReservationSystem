@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,5 +88,10 @@ public class TimelineService {
         }
         
         return timelineDto;
+    }
+
+    public boolean reserve(LocalDateTime dateTime, String counselorName, String studentName, String summary, String detail){
+        // TODO: 登録処理
+        return true;
     }
 }
