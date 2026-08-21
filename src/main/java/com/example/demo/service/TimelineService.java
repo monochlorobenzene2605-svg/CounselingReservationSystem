@@ -53,6 +53,8 @@ public class TimelineService {
         List<Reservation> reservations = reservationRepository.findByCounselorAndDate(counselor, date);
         List<UnavailableSlot> unavailables = unavailableSlotRepository.findByCounselorAndDate(counselor, date);
 
+        //TODO: StudentDtoの生成 student/timelineの方もdtoを参照する形に変える
+
         // TODO: できればここもっと見通しやすいコードに書き換えたい
         // それぞれのslotについて、Statusを正しく割り当てる 必要ならsummaryとdetailも
         for(SlotTemplate t: slotTemplates){
