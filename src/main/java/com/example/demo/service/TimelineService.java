@@ -47,11 +47,11 @@ public class TimelineService {
         TimelineDto timelineDto = new TimelineDto();
         timelineDto.setDate(date);
         timelineDto.setCounselorName(counselor.getName());
+        timelineDto.setCounselorId(counselor.getId());
 
         List<SlotTemplate> slotTemplates = slotTemplateRepository.findAll(Sort.by("startTime"));
         List<Reservation> reservations = reservationRepository.findByCounselorAndDate(counselor, date);
         List<UnavailableSlot> unavailables = unavailableSlotRepository.findByCounselorAndDate(counselor, date);
-        List<SlotDto> slots = new ArrayList<>();
 
         // TODO: できればここもっと見通しやすいコードに書き換えたい
         // それぞれのslotについて、Statusを正しく割り当てる 必要ならsummaryとdetailも
