@@ -15,4 +15,5 @@ public class SlotDto {
     private Status status = Status.Empty;
     private String summary = "summary";
     private String detail = "detail";
+    // TODO: 予約キャンセル時に使うidをどう扱うか
 }

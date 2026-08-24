@@ -15,14 +15,14 @@ import lombok.AccessLevel;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SlotTemplate {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     // 値が変更されることはないので、setterは作らない
     @Column(name = "period_no", nullable = false, unique = true)
     @Getter
-	private String periodNo; // n限目
+    private String periodNo; // n限目
     
     @Column(name = "start_time", nullable = false)
     @Getter
