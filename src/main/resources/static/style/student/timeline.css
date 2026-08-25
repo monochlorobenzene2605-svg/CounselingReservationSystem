@@ -37,9 +37,9 @@ body {
 
 /* 予約キャンセルメッセージ */
 .cancel-message {
-    background-color: #fee2e2;
-    color: #b91c1c;
-    border: 1px solid #fecaca;
+    background-color: #dcfce7;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
 }
 
 /* エラーメッセージ */

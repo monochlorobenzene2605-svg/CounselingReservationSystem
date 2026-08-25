@@ -30,7 +30,7 @@ public class CounselorTimelineController {
         model.addAttribute("userId", userId);
         model.addAttribute("userName", userName);
         model.addAttribute("date", date);
-;
+
         return "counselor/timeline"; 
     }
 }
