@@ -15,44 +15,44 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http
-				.authorizeHttpRequests((auth) -> auth
-						.requestMatchers("/login", "/style/login.css").permitAll()
-						.requestMatchers("/student/**").hasRole("STUDENT")
-						.requestMatchers("/counselor/**").hasRole("COUNSELOR")
-						.anyRequest().authenticated())
-				.formLogin(form -> form
-						.loginPage("/login")
-						.successHandler((req, res, auth) -> {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .authorizeHttpRequests((auth) -> auth
+                        .requestMatchers("/login", "/style/login.css").permitAll()
+                        .requestMatchers("/student/**").hasRole("STUDENT")
+                        .requestMatchers("/counselor/**").hasRole("COUNSELOR")
+                        .anyRequest().authenticated())
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .successHandler((req, res, auth) -> {
                             String today = LocalDate.now()
                                     .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-							boolean isStudent = auth.getAuthorities()
-									.stream()
-									.anyMatch(a -> a.getAuthority()
-											.equals("ROLE_STUDENT"));
+                            boolean isStudent = auth.getAuthorities()
+                                    .stream()
+                                    .anyMatch(a -> a.getAuthority()
+                                            .equals("ROLE_STUDENT"));
 
-							if (isStudent) {
-								res.sendRedirect("/student/timeline" + "?date=" + today);
-							} else {
-								res.sendRedirect("/counselor/timeline" + "?date=" + today);
-							}
-						}))
-				.logout(logout -> logout
-					    .logoutUrl("/logout")
-					    .logoutSuccessUrl("/login?logout")
-					    .invalidateHttpSession(true)
-					    .deleteCookies("JSESSIONID")
-					    .permitAll()
-				);
+                            if (isStudent) {
+                                res.sendRedirect("/student/timeline" + "?date=" + today);
+                            } else {
+                                res.sendRedirect("/counselor/timeline" + "?date=" + today);
+                            }
+                        }))
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                        .permitAll()
+                );
 
-		return http.build();
-	}
+        return http.build();
+    }
 }

@@ -29,9 +29,9 @@ import lombok.Setter;
     }
 )
 public class UnavailableSlot {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "counselor_id", referencedColumnName = "id", nullable = false)

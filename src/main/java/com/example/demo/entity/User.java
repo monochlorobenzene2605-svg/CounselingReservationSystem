@@ -15,15 +15,15 @@ import lombok.AccessLevel;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
-	private Integer id;
+    private Integer id;
 
     // 今回は値を変更することは考えないので、setterは作らない
     @Column(name = "user_id", nullable = false, unique = true,columnDefinition = "VARCHAR(64) COLLATE utf8mb4_bin")
     @Getter
-	private String userId; // ログイン時に使用するユーザーID
+    private String userId; // ログイン時に使用するユーザーID
     
     @Column(name = "password", nullable = false,columnDefinition = "VARCHAR(64) COLLATE utf8mb4_bin")
     @Getter
@@ -40,5 +40,5 @@ public class User {
     @Column(name = "role", nullable = false)
     @Getter
     private Role role = Role.STUDENT; // デフォルトはSTUDENT
-	
+    
 }
