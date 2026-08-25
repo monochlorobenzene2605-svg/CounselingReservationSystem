@@ -40,6 +40,14 @@
                 id="reserve-error-msg"
             >
                 予約に失敗しました。同時間帯の予約が既にあるか確認してください。
+            </div>            
+            <!-- キャンセル失敗時 -->
+            <div
+                th:if="${param.status != null and #strings.equals(param.status, 'cancelError')}"
+                class="error-message"
+                id="reserve-error-msg"
+            >
+                キャンセル処理に失敗しました。
             </div>
 
             <header class="header">
@@ -153,10 +161,14 @@
                                 ></td>
                                 <td
                                     th:if="${slot.status == SlotStatus.Mine}"
-                                    class="slot-cell slot-mine"
+                                    th:data-reservation-id="${slot.reservationId}"
                                     th:data-time="${#temporals.format(slot.startTime, 'HH:mm')}"
+                                    th:data-counselor-name="${timeline.counselorName}"
+                                    th:data-student-name="${userName}"
                                     th:data-summary="${slot.summary}"
                                     th:data-detail="${slot.detail}"
+                                    class="slot-cell slot-mine"
+                                    onClick="openConfirmModal(event)"
                                 ></td>
                                 <td
                                     th:if="${slot.status == SlotStatus.Unavailabled}"
@@ -248,6 +260,14 @@
                     <div class="modal-title">予約内容の確認</div>
                     <span class="status-badge">予約確定</span>
                 </div>
+                <!-- キャンセル処理用のreservationのidを持ったform -->
+                <form id="cancel-form" th:action="@{/reserve/cancel}" method="POST">
+                    <input
+                        type="hidden"
+                        id="modal-reservation-id"
+                        name="reservationId"
+                    />
+                </form>
                 <div class="form-group">
                     <label>担当相談員</label>
                     <div class="display-value" id="confirm-counselor">-</div>

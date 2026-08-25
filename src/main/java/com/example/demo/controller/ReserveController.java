@@ -27,13 +27,14 @@ public class ReserveController {
     private SlotTemplateRepository slotRepository;
     @Autowired
     private ReservationService reservationService;
-    
+
     @PostMapping("/reserve")
-    public String reserve(@RequestParam String counselorId, @RequestParam String dateTime, @RequestParam String summary, @RequestParam String detail){
+    public String reserve(@RequestParam String counselorId, @RequestParam String dateTime, @RequestParam String summary,
+            @RequestParam String detail) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String loginUserId = auth.getName();
         User student = userRepository.findByUserId(loginUserId).orElseThrow();
-        
+
         User counselor = userRepository.findById(Integer.parseInt(counselorId)).orElseThrow();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -47,11 +48,25 @@ public class ReserveController {
         String today = LocalDate.now()
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-        try{
+        try {
             reservationService.reserve(student, counselor, date, slot, summary, detail);
-        } catch (DataIntegrityViolationException e){ // すでに同じ時間の別な相談員に予約している場合
+        } catch (DataIntegrityViolationException e) { // すでに同じ時間の別な相談員に予約している場合
             return ("redirect:/student/timeline?date=" + today + "&status=alreadyReserved");
         }
         return ("redirect:/student/timeline?date=" + today + "&status=reserved");
+    }
+
+    @PostMapping("/reserve/cancel")
+    public String cancel(@RequestParam int reservationId) {
+        String today = LocalDate.now()
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        boolean isCanceled = reservationService.cancel(reservationId);
+        
+        String status = "canceled";
+        if(!isCanceled){
+            status = "cancelError";
+        }
+
+        return ("redirect:/student/timeline?date=" + today + "&status=" + status);
     }
 }

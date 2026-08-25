@@ -36,6 +36,7 @@ import lombok.AccessLevel;
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)

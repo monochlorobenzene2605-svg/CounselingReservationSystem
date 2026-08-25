@@ -26,6 +26,20 @@ public class ReservationService {
             // TODO:feat 将来的に上の案で書き直したい
         } catch (Exception e) { 
             System.out.println(e.getStackTrace());
+            return false;
+        }
+        return true;
+    }
+    
+    public boolean cancel(int reservationId){
+        if(!reservationRepository.existsById(reservationId)) {
+            return false;
+        }
+        try {
+            reservationRepository.deleteById(reservationId);
+        } catch (Exception e) {
+            System.out.println(e.getStackTrace());
+            return false;
         }
         return true;
     }

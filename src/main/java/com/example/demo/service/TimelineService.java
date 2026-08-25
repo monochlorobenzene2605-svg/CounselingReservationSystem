@@ -68,6 +68,7 @@ public class TimelineService {
                         slot.setStatus(SlotDto.Status.Mine);
                         slot.setSummary(r.getSummary());
                         slot.setDetail(r.getDetail());
+                        slot.setReservationId(r.getId());
                     }
                     break;
                 }
