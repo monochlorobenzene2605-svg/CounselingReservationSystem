@@ -75,13 +75,17 @@
                                 onchange="this.form.submit()"
                             />
                             <script>
-                                // 今日以前を選択できないようにする
-                                document.getElementById("date-picker").min =
-                                    new Date().toISOString().split("T")[0];
+                                // 今日～1か月後までの範囲しか選択できないようにする
+                                const datePicker = document.getElementById("date-picker");
+                                const today = new Date();
+                                datePicker.min = today.toISOString().split("T")[0];
+                                const maxDate = new Date();
+                                maxDate.setMonth(today.getMonth()+1);
+                                datePicker.max = maxDate.toISOString().split("T")[0];
                             </script>
                         </form>
                     </div>
-                    <a th:href="@{/reservations}" class="nav-btn btn-list"
+                    <a th:href="@{/student/reservation-list}" class="nav-btn btn-list"
                         >予約一覧</a
                     >
                     <form th:action="@{/logout}" method="post">
