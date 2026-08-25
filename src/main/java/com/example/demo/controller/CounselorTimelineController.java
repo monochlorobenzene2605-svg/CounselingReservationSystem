@@ -32,6 +32,5 @@ public class CounselorTimelineController {
         model.addAttribute("date", date);
 ;
         return "counselor/timeline"; 
-        // TODO:NOW(2026-08-14) dateをhtmlに渡すのと、その日のタイムラインを表示するのを実装する
     }
 }

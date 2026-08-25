@@ -25,7 +25,6 @@
             >
                 面談の予約が完了しました。
             </div>
-
             <!-- 予約キャンセル時 -->
             <div
                 th:if="${param.status != null and #strings.equals(param.status, 'canceled')}"
@@ -34,6 +33,15 @@
             >
                 予約をキャンセルしました。
             </div>
+            <!-- エラー時 -->
+            <div
+                th:if="${param.status != null and #strings.equals(param.status, 'alreadyReserved')}"
+                class="error-message"
+                id="reserve-error-msg"
+            >
+                予約に失敗しました。同時間帯の予約が既にあるか確認してください。
+            </div>
+
             <header class="header">
                 <div class="header-title-area">
                     <h1>予約状況タイムライン</h1>

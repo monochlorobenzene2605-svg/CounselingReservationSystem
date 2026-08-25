@@ -6,6 +6,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -42,11 +43,15 @@ public class ReserveController {
         LocalTime time = ldt.toLocalTime();
         SlotTemplate slot = slotRepository.findByStartTime(time).orElseThrow();
 
-        reservationService.reserve(student, counselor, date, slot, summary, detail);
-
         // TODO: リダイレクト先を予約した日時に
         String today = LocalDate.now()
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        return ("redirect:/student/timeline" + "?date=" + today + "&status=reserved");
+
+        try{
+            reservationService.reserve(student, counselor, date, slot, summary, detail);
+        } catch (DataIntegrityViolationException e){ // すでに同じ時間の別な相談員に予約している場合
+            return ("redirect:/student/timeline?date=" + today + "&status=alreadyReserved");
+        }
+        return ("redirect:/student/timeline?date=" + today + "&status=reserved");
     }
 }
