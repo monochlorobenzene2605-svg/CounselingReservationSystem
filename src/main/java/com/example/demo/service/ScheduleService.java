@@ -19,9 +19,9 @@ import com.example.demo.repository.SlotTemplateRepository;
 import com.example.demo.repository.UnavailableSlotRepository;
 import com.example.demo.repository.UserRepository;
 
-// DBからデータ持ってきてタイムラインを作る
+// DBからデータ持ってきて予約の一覧を作る
 @Service
-public class TimelineService {
+public class ScheduleService {
     @Autowired
     private ReservationRepository reservationRepository;
     @Autowired
@@ -53,40 +53,48 @@ public class TimelineService {
         List<Reservation> reservations = reservationRepository.findByCounselorAndDate(counselor, date);
         List<UnavailableSlot> unavailables = unavailableSlotRepository.findByCounselorAndDate(counselor, date);
 
-        // TODO: できればここもっと見通しやすいコードに書き換えたい
-        // それぞれのslotについて、Statusを正しく割り当てる 必要ならsummaryとdetailも
-        for(SlotTemplate t: slotTemplates){
-            SlotDto slot = new SlotDto(t.getStartTime());
-            slot.setStatus(SlotDto.Status.Empty);
-
-            for(Reservation r: reservations){
-                Boolean isReserved = t.getPeriodNo().equals(r.getSlotTemplate().getPeriodNo());
-                if(isReserved){
-                    slot.setStatus(SlotDto.Status.Reserved);
-                    Boolean isMine = user.getId().equals(r.getStudent().getId());
-                    if(isMine){
-                        slot.setStatus(SlotDto.Status.Mine);
-                        slot.setSummary(r.getSummary());
-                        slot.setDetail(r.getDetail());
-                        slot.setReservationId(r.getId());
-                    }
-                    break;
-                }
-            }
-            
-            if(slot.getStatus() == SlotDto.Status.Empty){
-                for(UnavailableSlot u: unavailables){
-                    Boolean isUnavailable = t.getPeriodNo().equals(u.getSlotTemplate().getPeriodNo());
-                    if(isUnavailable){
-                        slot.setStatus(SlotDto.Status.Unavailabled);
-                        break;
-                    }
-                }
-            }
-            
+        for (SlotTemplate t : slotTemplates) {
+            SlotDto slot = createSlot(t, reservations, unavailables, user);
             timelineDto.addSlotDto(slot);
         }
-        
+
         return timelineDto;
     }
+    
+    private SlotDto createSlot(
+        SlotTemplate template,
+        List<Reservation> reservations,
+        List<UnavailableSlot> unavailables,
+        User user) {
+
+        SlotDto slot = new SlotDto(template.getStartTime());
+
+        for (Reservation r : reservations) {
+            if (!template.getPeriodNo().equals(r.getSlotTemplate().getPeriodNo())) {
+                continue;
+            }
+
+            if (user.getId().equals(r.getStudent().getId())) {
+                slot.setStatus(SlotDto.Status.Mine);
+                slot.setSummary(r.getSummary());
+                slot.setDetail(r.getDetail());
+                slot.setReservationId(r.getId());
+            } else {
+                slot.setStatus(SlotDto.Status.Reserved);
+            }
+
+            return slot;
+        }
+
+        for (UnavailableSlot u : unavailables) {
+            if (template.getPeriodNo().equals(u.getSlotTemplate().getPeriodNo())) {
+                slot.setStatus(SlotDto.Status.Unavailabled);
+                return slot;
+            }
+        }
+
+        slot.setStatus(SlotDto.Status.Empty);
+        return slot;
+    }
+
 }

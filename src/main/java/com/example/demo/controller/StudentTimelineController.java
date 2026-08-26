@@ -17,7 +17,7 @@ import com.example.demo.entity.SlotTemplate;
 import com.example.demo.entity.User;
 import com.example.demo.repository.SlotTemplateRepository;
 import com.example.demo.repository.UserRepository;
-import com.example.demo.service.TimelineService;
+import com.example.demo.service.ScheduleService;
 
 @Controller
 public class StudentTimelineController {
@@ -27,7 +27,7 @@ public class StudentTimelineController {
     private SlotTemplateRepository slotTemplateRepository;
     
     @Autowired
-    private TimelineService timelineService;
+    private ScheduleService timelineService;
     
     @GetMapping("/student/timeline")
     public String showStudentTimeline(Model model, Authentication auth, @RequestParam(required = false) String dateString) {
