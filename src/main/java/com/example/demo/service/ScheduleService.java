@@ -55,19 +55,20 @@ public class ScheduleService {
         List<UnavailableSlot> unavailables = unavailableSlotRepository.findByCounselorAndDate(counselor, date);
 
         for (SlotTemplate t : slotTemplates) {
-            SlotDto slot = createSlot(t, date, reservations, unavailables, user);
+            SlotDto slot = createTimelineSlot(t, date, reservations, unavailables, user);
             timelineDto.addSlotDto(slot);
         }
 
         return timelineDto;
     }
-    
-    private SlotDto createSlot(
-        SlotTemplate template,
-        LocalDate date,
-        List<Reservation> reservations,
-        List<UnavailableSlot> unavailables,
-        User user) {
+
+    // タイムライン用のSlotDto生成 空ならEmptyのDtoを生成する
+    private SlotDto createTimelineSlot(
+            SlotTemplate template,
+            LocalDate date,
+            List<Reservation> reservations,
+            List<UnavailableSlot> unavailables,
+            User user) {
 
         LocalDateTime dateTime = date.atTime(template.getStartTime());
         SlotDto slot = new SlotDto(dateTime);
@@ -77,11 +78,9 @@ public class ScheduleService {
                 continue;
             }
 
+            slot = createReservationSlot(r);
             if (user.getId().equals(r.getStudent().getId())) {
                 slot.setStatus(SlotDto.Status.Mine);
-                slot.setSummary(r.getSummary());
-                slot.setDetail(r.getDetail());
-                slot.setReservationId(r.getId());
             } else {
                 slot.setStatus(SlotDto.Status.Reserved);
             }
@@ -97,6 +96,26 @@ public class ScheduleService {
         }
 
         slot.setStatus(SlotDto.Status.Empty);
+        return slot;
+    }
+
+    public List<SlotDto> createReservationSlots(User student) {
+        List<SlotDto> slots = new ArrayList<>();
+        List<Reservation> reservations = reservationRepository.findByStudent(student);
+        for (Reservation r : reservations) {
+            slots.add(createReservationSlot(r));
+        }
+        return slots;
+    }
+
+    private SlotDto createReservationSlot(Reservation reservation){
+        LocalDate date = reservation.getDate();
+        LocalDateTime dateTime = date.atTime(reservation.getSlotTemplate().getStartTime());
+        SlotDto slot = new SlotDto(dateTime);
+        slot.setSummary(reservation.getSummary());
+        slot.setDetail(reservation.getDetail());
+        slot.setReservationId(reservation.getId());
+        slot.setCounselorName(reservation.getCounselor().getName());
         return slot;
     }
 

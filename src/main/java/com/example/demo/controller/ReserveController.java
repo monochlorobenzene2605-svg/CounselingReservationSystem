@@ -37,7 +37,7 @@ public class ReserveController {
 
         User counselor = userRepository.findById(Integer.parseInt(counselorId)).orElseThrow();
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
         LocalDateTime ldt = LocalDateTime.parse(dateTime, formatter);
         LocalDate date = ldt.toLocalDate();
 

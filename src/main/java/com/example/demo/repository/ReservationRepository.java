@@ -10,4 +10,5 @@ import com.example.demo.entity.User;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Integer> {
     List<Reservation> findByCounselorAndDate(User counselor, LocalDate date);
+    List<Reservation> findByStudent(User student);
 }

@@ -1,0 +1,300 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+    background-color: #f4f6f9;
+    color: #333;
+    line-height: 1.5;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    width: 100%;
+    max-width: 680px;
+}
+
+/* メッセージバナー（timeline.cssに準拠） */
+.success-message,
+.cancel-message,
+.error-message {
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+/* 予約完了・キャンセルメッセージ */
+.success-message,
+.cancel-message {
+    background-color: #dcfce7;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+}
+
+/* エラーメッセージ */
+.error-message {
+    background-color: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+}
+
+/* 上部ヘッダー・アクションエリア */
+.header-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.btn-timeline {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background-color: #ffffff;
+    color: #3b82f6;
+    border: 1px solid #3b82f6;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.btn-timeline:hover {
+    background-color: #eff6ff;
+}
+
+.btn-logout {
+    padding: 8px 16px;
+    background-color: #ffffff;
+    color: #64748b;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-logout:hover {
+    background-color: #f1f5f9;
+    color: #334155;
+}
+
+.page-title {
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 24px;
+}
+
+/* カードデザイン */
+.card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2e8f0;
+}
+
+/* 日時ヘッダー */
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.day-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background-color: #f1f5f9;
+    color: #475569;
+    font-weight: bold;
+    font-size: 0.85rem;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+}
+
+.datetime-text {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+/* 情報ブロック領域 */
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+@media (max-width: 560px) {
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.info-box {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 14px 16px;
+    background-color: #ffffff;
+}
+
+.box-title {
+    font-size: 0.85rem;
+    color: #475569;
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.box-title .icon {
+    font-size: 0.9rem;
+}
+
+/* 担当者コンテンツ */
+.interviewer-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #005ea6;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+    border: none;
+}
+
+.interviewer-name {
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: #1e293b;
+}
+
+/* 詳細コンテンツ */
+.detail-heading {
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: #1e293b;
+    margin-bottom: 6px;
+}
+
+.detail-text {
+    font-size: 0.85rem;
+    color: #475569;
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+/* 区切り線 */
+.divider {
+    border: none;
+    border-top: 1px solid #f1f5f9;
+    margin-bottom: 16px;
+}
+
+/* フッター・アクション */
+.card-footer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-cancel {
+    padding: 8px 16px;
+    background-color: #dc2626;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-cancel:hover {
+    background-color: #b91c1c;
+}
+
+/* 予約がない場合のスタイル */
+.no-reservation {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 48px 24px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2e8f0;
+}
+
+.no-reservation-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+.no-reservation-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #0f172a;
+    margin-bottom: 8px;
+}
+
+.no-reservation-text {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin-bottom: 24px;
+}
+
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background-color: #2563eb;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: #1d4ed8;
+}

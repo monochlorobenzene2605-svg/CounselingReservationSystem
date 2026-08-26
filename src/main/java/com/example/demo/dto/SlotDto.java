@@ -16,4 +16,5 @@ public class SlotDto {
     private String summary = "summary";
     private String detail = "detail";
     private int reservationId;
+    private String counselorName;
 }

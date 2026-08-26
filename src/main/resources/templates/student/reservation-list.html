@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>予約一覧</title>
+    <link
+        th:href="@{/style/student/reservation-list.css}"
+        href="../../static/style/student/reservation-list.css"
+        rel="stylesheet"
+    />
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- キャンセル完了時バナー -->
+        <div th:if="${param.status != null and #strings.equals(param.status, 'canceled')}" class="cancel-message">
+            予約をキャンセルしました。
+        </div>
+        <!-- エラー発生時バナー -->
+        <div th:if="${param.status != null and #strings.equals(param.status, 'error')}" class="error-message">
+            エラーが発生しました。
+        </div>
+        <!-- ナビゲーション・アクションボタン -->
+        <div class="header-actions">
+            <a th:href="@{/student/timeline}" href="./timeline.html">
+                <button class="btn-timeline">📅 予約タイムライン画面へ</button>
+            </a>
+            <form th:action="@{/logout}" method="POST">
+                <button class="btn-logout">ログアウト</button>
+            </form>
+        </div>
+
+        <h1 class="page-title">面談予約一覧</h1>
+
+        <div class="card-list">
+            <!-- カード 1 -->
+            <div th:each="slot: ${slots}" class="card">
+                <div class="card-header">
+                    <span class="day-badge" th:text="${#temporals.format(slot.startTime, 'E')}">土</span>
+                    <span class="datetime-text" th:text="${#temporals.format(slot.startTime, 'yyyy/MM/dd HH:mm')}">2026/08/26 15:00</span>
+                </div>
+
+                <div class="info-grid">
+                    <!-- 担当者 -->
+                    <div class="info-box">
+                        <div class="box-title">
+                            <span class="icon">👤</span>
+                            <span>面談担当者</span>
+                        </div>
+                        <div class="interviewer-content">
+                            <div class="avatar" th:text="${slot.counselorName.substring(0,1)}">田</div>
+                            <span class="interviewer-name" th:text="${slot.counselorName}">田中 太郎</span>
+                        </div>
+                    </div>
+
+                    <!-- 内容 -->
+                    <div class="info-box">
+                        <div class="box-title">
+                            <span class="icon">📝</span>
+                            <span>面談内容</span>
+                        </div>
+                        <div class="detail-heading" th:text="${slot.summary}">履歴書・職務経歴書の添削。以下６０字のダミー文章。ああああああああああああああああああああああああああああああああああ＠</div>
+                        <p class="detail-text" th:text="${slot.detail}">一度書き直したものを改めて添削してほしいです。以下１４０字のダミー文章。あああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああ＠</p>
+                    </div>
+                </div>
+
+                <hr class="divider">
+
+                <div class="card-footer">
+                    <button class="btn-cancel">予約をキャンセル</button>
+                </div>
+            </div>
+            <!-- 予約がない場合 -->
+            <div th:if="${#lists.isEmpty(slots)}" class="no-reservation">
+                <div class="no-reservation-icon">📅</div>
+                <div class="no-reservation-title">現在、面談の予約はありません</div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
