@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +12,17 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.demo.entity.SlotTemplate;
 import com.example.demo.entity.User;
+import com.example.demo.repository.SlotTemplateRepository;
 import com.example.demo.repository.UserRepository;
 
 @Controller
 public class CounselorTimelineController {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private SlotTemplateRepository slotTemplateRepository;
     
     @GetMapping("/counselor/timeline")
     public String showCounselorTimeline(Model model, Authentication auth, @RequestParam(required = false) String date) {
@@ -30,6 +35,9 @@ public class CounselorTimelineController {
         model.addAttribute("userId", userId);
         model.addAttribute("userName", userName);
         model.addAttribute("date", date);
+        
+        List<SlotTemplate> slotTemplates = slotTemplateRepository.findAll();
+        model.addAttribute("slotTemplates", slotTemplates);
 
         return "counselor/timeline"; 
     }
