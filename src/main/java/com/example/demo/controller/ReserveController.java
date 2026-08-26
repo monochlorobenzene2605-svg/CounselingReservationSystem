@@ -11,7 +11,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.example.demo.entity.SlotTemplate;
 import com.example.demo.entity.User;
@@ -57,16 +59,21 @@ public class ReserveController {
     }
 
     @PostMapping("/reserve/cancel")
-    public String cancel(@RequestParam int reservationId) {
-        String today = LocalDate.now()
-                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    public String cancel(@RequestParam int reservationId,
+            @RequestHeader(value = "Referer", required = true) String referer) {
         boolean isCanceled = reservationService.cancel(reservationId);
-        
+
         String status = "canceled";
-        if(!isCanceled){
+        if (!isCanceled) {
             status = "cancelError";
         }
 
-        return ("redirect:/student/timeline?date=" + today + "&status=" + status);
+        String redirectUrl = UriComponentsBuilder
+                .fromUriString(referer)
+                .queryParam("status", status)
+                .build()
+                .toUriString();
+
+        return "redirect:" + redirectUrl;
     }
 }
