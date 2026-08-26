@@ -62,7 +62,7 @@ public class Reservation {
     @Getter @Setter
     private String summary; // 相談内容の概要
     
-    @Column(name = "detail", columnDefinition = "TEXT")
+    @Column(name = "detail", length = 140)
     @Getter @Setter
     private String detail; // 相談内容の詳細
 
