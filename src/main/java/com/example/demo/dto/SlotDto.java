@@ -1,6 +1,6 @@
 package com.example.demo.dto;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 @Data
 @RequiredArgsConstructor
 public class SlotDto {
-    private final LocalTime startTime;
+    private final LocalDateTime startTime;
     public enum Status {
         Empty, Reserved, Mine, Unavailabled
     }

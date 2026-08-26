@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +55,7 @@ public class ScheduleService {
         List<UnavailableSlot> unavailables = unavailableSlotRepository.findByCounselorAndDate(counselor, date);
 
         for (SlotTemplate t : slotTemplates) {
-            SlotDto slot = createSlot(t, reservations, unavailables, user);
+            SlotDto slot = createSlot(t, date, reservations, unavailables, user);
             timelineDto.addSlotDto(slot);
         }
 
@@ -63,11 +64,13 @@ public class ScheduleService {
     
     private SlotDto createSlot(
         SlotTemplate template,
+        LocalDate date,
         List<Reservation> reservations,
         List<UnavailableSlot> unavailables,
         User user) {
 
-        SlotDto slot = new SlotDto(template.getStartTime());
+        LocalDateTime dateTime = date.atTime(template.getStartTime());
+        SlotDto slot = new SlotDto(dateTime);
 
         for (Reservation r : reservations) {
             if (!template.getPeriodNo().equals(r.getSlotTemplate().getPeriodNo())) {

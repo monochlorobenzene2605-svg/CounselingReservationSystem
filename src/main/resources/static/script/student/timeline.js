@@ -1,10 +1,9 @@
 function openReserveModal(ev) {
     const dataset = ev.currentTarget.dataset;
-    const dateVal = document.getElementById("date-picker").value;
 
     document.getElementById("modal-counselor-id").value = dataset.counselorId;
     document.getElementById("modal-counselor").value = dataset.counselorName;
-    document.getElementById("modal-time").value = dateVal + " " + dataset.time;
+    document.getElementById("modal-datetime").value = dataset.datetime;
     document.getElementById("student-name").value = dataset.studentName;
     document.getElementById("reserve-summary").value = "";
     document.getElementById("reserve-detail").value = "";
@@ -18,11 +17,10 @@ function closeReserveModal() {
 
 function openConfirmModal(ev) {
     const dataset = ev.currentTarget.dataset;
-    const dateVal = document.getElementById("date-picker").value;
 
     document.getElementById("modal-reservation-id").value = dataset.reservationId;
     document.getElementById("confirm-counselor").textContent = dataset.counselorName;
-    document.getElementById("confirm-time").textContent = dateVal + " " + dataset.time;
+    document.getElementById("confirm-datetime").textContent = dataset.datetime;
     document.getElementById("confirm-user-name").textContent = dataset.studentName;
     document.getElementById("confirm-summary").textContent = dataset.summary;
     document.getElementById("confirm-detail").textContent = dataset.detail;

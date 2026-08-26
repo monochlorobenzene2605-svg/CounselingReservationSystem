@@ -152,7 +152,7 @@
                             <span th:each="slot: ${timeline.slots}">
                                 <td
                                     th:if="${slot.status == SlotStatus.Empty}"
-                                    th:data-time="${#temporals.format(slot.startTime, 'HH:mm')}"
+                                    th:data-datetime="${#temporals.format(slot.startTime, 'yyyy/MM/dd HH:mm')}"
                                     th:data-counselor-name="${timeline.counselorName}"
                                     th:data-counselor-id="${timeline.counselorId}"
                                     th:data-student-name="${userName}"
@@ -166,7 +166,7 @@
                                 <td
                                     th:if="${slot.status == SlotStatus.Mine}"
                                     th:data-reservation-id="${slot.reservationId}"
-                                    th:data-time="${#temporals.format(slot.startTime, 'HH:mm')}"
+                                    th:data-datetime="${#temporals.format(slot.startTime, 'yyyy/MM/dd HH:mm')}"
                                     th:data-counselor-name="${timeline.counselorName}"
                                     th:data-student-name="${userName}"
                                     th:data-summary="${slot.summary}"
@@ -206,7 +206,7 @@
                         <label>日時</label>
                         <input
                             type="text"
-                            id="modal-time"
+                            id="modal-datetime"
                             name="dateTime"
                             readonly
                         />
@@ -278,7 +278,7 @@
                 </div>
                 <div class="form-group">
                     <label>日時</label>
-                    <div class="display-value" id="confirm-time">-</div>
+                    <div class="display-value" id="confirm-datetime">-</div>
                 </div>
                 <div class="form-group">
                     <label>お名前</label>
