@@ -25,9 +25,8 @@ public class StudentTimelineController {
     private UserRepository userRepository;
     @Autowired
     private SlotTemplateRepository slotTemplateRepository;
-    
     @Autowired
-    private ScheduleService timelineService;
+    private ScheduleService scheduleService;
     
     @GetMapping("/student/timeline")
     public String showStudentTimeline(Model model, Authentication auth, @RequestParam(required = false) String dateString) {
@@ -56,7 +55,7 @@ public class StudentTimelineController {
         List<SlotTemplate> slotTemplates = slotTemplateRepository.findAll();
         model.addAttribute("slotTemplates", slotTemplates);
         
-        List<TimelineDto> timelines = timelineService.createTimelines(user.orElseThrow(), date);
+        List<TimelineDto> timelines = scheduleService.createTimelines(user.orElseThrow(), date);
         model.addAttribute("timelines", timelines);
 
         model.addAttribute("SlotStatus",SlotDto.Status.class); // html側からSlotStatus.Emptyみたいにenumにアクセスできるようにするため
