@@ -10,13 +10,20 @@ import com.example.demo.entity.Reservation;
 import com.example.demo.entity.SlotTemplate;
 import com.example.demo.entity.User;
 import com.example.demo.repository.ReservationRepository;
+import com.example.demo.repository.UnavailableSlotRepository;
 
 @Service
 public class ReservationService {
     @Autowired
     private ReservationRepository reservationRepository;
+    @Autowired
+    private UnavailableSlotRepository unavailableSlotRepository;
 
     public boolean reserve(User student, User counselor, LocalDate date, SlotTemplate slot, String summary, String detail){
+        if(isExistsUnavailable(counselor, date, slot)){
+            throw new IllegalArgumentException("その時間は面談不可です。");
+        }
+
         try {
             Reservation reservation = new Reservation(student, counselor, date, slot, summary, detail);
             reservationRepository.save(reservation);
@@ -42,5 +49,9 @@ public class ReservationService {
             return false;
         }
         return true;
+    }
+    
+    private boolean isExistsUnavailable(User counselor, LocalDate date, SlotTemplate slot){
+        return unavailableSlotRepository.existsByCounselorAndDateAndSlotTemplate(counselor,date,slot);
     }
 }

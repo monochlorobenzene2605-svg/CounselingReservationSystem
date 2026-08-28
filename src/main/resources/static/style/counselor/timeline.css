@@ -206,16 +206,16 @@ body {
 }
 
 /* 2. 予約あり枠（クリックで詳細閲覧） */
-.slot-booked {
+.slot-reserved {
     background-color: #ecfdf5;
     color: #047857;
     font-weight: bold;
     border: 2px solid #10b981 !important;
 }
-.slot-booked:hover {
+.slot-reserved:hover {
     background-color: #d1fae5;
 }
-.slot-booked::after {
+.slot-reserved::after {
     content: "📅 予約あり\a(詳細確認)";
 }
 

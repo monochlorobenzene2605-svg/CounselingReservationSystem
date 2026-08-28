@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,25 +11,52 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.demo.dto.SlotDto;
+import com.example.demo.dto.TimelineDto;
+import com.example.demo.entity.SlotTemplate;
 import com.example.demo.entity.User;
+import com.example.demo.repository.SlotTemplateRepository;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.service.ScheduleService;
 
 @Controller
 public class CounselorTimelineController {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private SlotTemplateRepository slotTemplateRepository;
+    @Autowired
+    private ScheduleService scheduleService;
     
     @GetMapping("/counselor/timeline")
-    public String showCounselorTimeline(Model model, Authentication auth, @RequestParam(required = false) String date) {
-        if (date == null || date.isEmpty()) {
-            date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    public String showCounselorTimeline(Model model, Authentication auth, @RequestParam(required = false) String dateString) {
+        // dateStringからLocalDateへ変換
+        LocalDate date = null;
+        if (dateString != null && !dateString.isEmpty()) {
+            date = LocalDate.parse(dateString);
         }
+        if (date == null) {
+            date = LocalDate.now();
+        } 
+        
+        // 今日以前を選択できないように
+        LocalDate today = LocalDate.now();
+        if (date.isBefore(today)) {
+            date = today;
+        }
+
     	String userId = auth.getName();
     	Optional<User> user = userRepository.findByUserId(userId);
         String userName = user.map(User::getName).orElse("Unknown Name");
         model.addAttribute("userId", userId);
         model.addAttribute("userName", userName);
         model.addAttribute("date", date);
+        
+        List<SlotTemplate> slotTemplates = slotTemplateRepository.findAll();
+        model.addAttribute("slotTemplates", slotTemplates);
+        model.addAttribute("SlotStatus", SlotDto.Status.class);
+        List<TimelineDto> timeLines = scheduleService.createTimelines(user.orElseThrow(), date);
+        model.addAttribute("timeline", timeLines.getFirst());
 
         return "counselor/timeline"; 
     }

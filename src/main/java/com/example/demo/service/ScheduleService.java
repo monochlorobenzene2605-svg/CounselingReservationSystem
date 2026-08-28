@@ -34,6 +34,16 @@ public class ScheduleService {
 
     // DBから画面表示用のタイムラインを作る
     public List<TimelineDto> createTimelines(User user, LocalDate date) {
+        if (user.getRole() == User.Role.STUDENT) {
+            return createTimelineForStudent(user, date);
+        } else if (user.getRole() == User.Role.COUNSELOR) {
+            return creaTimelineForCounselor(user, date);
+        } else {
+            throw new IllegalArgumentException("存在しないRoleです。");
+        }
+    }
+
+    private List<TimelineDto> createTimelineForStudent(User user, LocalDate date) {
         List<TimelineDto> timelines = new ArrayList<>();
         List<User> counselors = userRepository.findByRole(User.Role.COUNSELOR);
 
@@ -41,6 +51,12 @@ public class ScheduleService {
             TimelineDto timeline = createTimeline(user, c, date);
             timelines.add(timeline);
         }
+        return timelines;
+    }
+
+    private List<TimelineDto> creaTimelineForCounselor(User user, LocalDate date) {
+        List<TimelineDto> timelines = new ArrayList<>();
+        timelines.add(createTimeline(user, user, date));
         return timelines;
     }
 
@@ -108,7 +124,7 @@ public class ScheduleService {
         return slots;
     }
 
-    private SlotDto createReservationSlot(Reservation reservation){
+    private SlotDto createReservationSlot(Reservation reservation) {
         LocalDate date = reservation.getDate();
         LocalDateTime dateTime = date.atTime(reservation.getSlotTemplate().getStartTime());
         SlotDto slot = new SlotDto(dateTime);
