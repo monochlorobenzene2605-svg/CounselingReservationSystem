@@ -38,6 +38,3 @@ function handleCancelReservation() {
     }
 }
 
-function handleLogout() {
-    if (confirm("ログアウトしますか？")) window.location.href = "/login";
-}

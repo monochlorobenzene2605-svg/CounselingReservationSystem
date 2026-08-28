@@ -12,6 +12,3 @@ function closeReservationModal() {
     document.getElementById("reseevation-modal").style.display = "none";
 }
 
-function handleLogout() {
-    if (confirm("ログアウトしますか？")) window.location.href = "/login";
-}
