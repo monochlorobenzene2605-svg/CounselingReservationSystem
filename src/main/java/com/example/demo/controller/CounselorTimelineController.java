@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,7 +11,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.example.demo.dto.SlotDto;
 import com.example.demo.dto.TimelineDto;
@@ -17,6 +22,7 @@ import com.example.demo.entity.SlotTemplate;
 import com.example.demo.entity.User;
 import com.example.demo.repository.SlotTemplateRepository;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.service.ReservationService;
 import com.example.demo.service.ScheduleService;
 
 @Controller
@@ -27,9 +33,12 @@ public class CounselorTimelineController {
     private SlotTemplateRepository slotTemplateRepository;
     @Autowired
     private ScheduleService scheduleService;
-    
+    @Autowired
+    private ReservationService reservationService;
+
     @GetMapping("/counselor/timeline")
-    public String showCounselorTimeline(Model model, Authentication auth, @RequestParam(required = false) String dateString) {
+    public String showCounselorTimeline(Model model, Authentication auth,
+            @RequestParam(required = false) String dateString) {
         // dateStringからLocalDateへ変換
         LocalDate date = null;
         if (dateString != null && !dateString.isEmpty()) {
@@ -37,27 +46,67 @@ public class CounselorTimelineController {
         }
         if (date == null) {
             date = LocalDate.now();
-        } 
-        
+        }
+
         // 今日以前を選択できないように
         LocalDate today = LocalDate.now();
         if (date.isBefore(today)) {
             date = today;
         }
 
-    	String userId = auth.getName();
-    	Optional<User> user = userRepository.findByUserId(userId);
+        String userId = auth.getName();
+        Optional<User> user = userRepository.findByUserId(userId);
         String userName = user.map(User::getName).orElse("Unknown Name");
         model.addAttribute("userId", userId);
         model.addAttribute("userName", userName);
         model.addAttribute("date", date);
-        
+
         List<SlotTemplate> slotTemplates = slotTemplateRepository.findAll();
         model.addAttribute("slotTemplates", slotTemplates);
         model.addAttribute("SlotStatus", SlotDto.Status.class);
         List<TimelineDto> timeLines = scheduleService.createTimelines(user.orElseThrow(), date);
         model.addAttribute("timeline", timeLines.getFirst());
 
-        return "counselor/timeline"; 
+        return "counselor/timeline";
+    }
+
+    @PostMapping("/counselor/unavailable/register")
+    public String registerUnavailable(@RequestParam String dateTimeString,
+            Authentication auth,
+            @RequestHeader(value = "Referer", required = true) String referer) {
+        LocalDateTime ldt = LocalDateTime.parse(dateTimeString);
+        LocalDate date = ldt.toLocalDate();
+        LocalTime time = ldt.toLocalTime();
+
+        String userId = auth.getName();
+        User counselor = userRepository.findByUserId(userId).orElseThrow();
+        
+        boolean isSuccess = reservationService.registerUnavailable(counselor, date, time);
+        String status = isSuccess ? "unavailableRegistered" : "error";
+
+        String redirectUrl = UriComponentsBuilder
+                .fromUriString(referer)
+                .replaceQueryParam("status", status)
+                .build()
+                .toUriString();
+        return "redirect:" + redirectUrl;
+    }
+
+    @PostMapping("/counselor/unavailable/cancel")
+    public String cancelUnavailable(@RequestParam String dateTimeString,
+            @RequestHeader(value = "Referer", required = true) String referer) {
+        LocalDateTime ldt = LocalDateTime.parse(dateTimeString);
+        LocalDate date = ldt.toLocalDate();
+        LocalTime time = ldt.toLocalTime();
+
+        boolean isSuccess = reservationService.cancelUnavailable(date, time);
+        String status = isSuccess ? "unavailableCanceled" : "error";
+
+        String redirectUrl = UriComponentsBuilder
+                .fromUriString(referer)
+                .replaceQueryParam("status", status)
+                .build()
+                .toUriString();
+        return "redirect:" + redirectUrl;
     }
 }

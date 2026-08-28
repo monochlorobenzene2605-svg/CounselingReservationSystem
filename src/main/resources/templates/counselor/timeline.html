@@ -13,11 +13,34 @@
             th:src="@{/script/counselor/timeline.js}"
             src="../../static/script/counselor/timeline.js"
         ></script>
-
     </head>
 
     <body>
         <div class="container">
+            <!-- 不可登録完了時 -->
+            <div
+                th:if="${param.status != null and #strings.equals(param.status, 'unavailableRegistered')}"
+                class="success-message"
+                id="unavailable-success-msg"
+            >
+                面談不可を設定しました。
+            </div>
+            <!-- 不可解除時 -->
+            <div
+                th:if="${param.status != null and #strings.equals(param.status, 'unavailableCanceled')}"
+                class="cancel-message"
+                id="unavailable-cancel-msg"
+            >
+                面談不可を解除しました。
+            </div>
+            <!-- エラー時 -->
+            <div
+                th:if="${param.status != null and #strings.equals(param.status, 'unavailableError')}"
+                class="error-message"
+                id="unavailable-error-msg"
+            >
+                更新処理に失敗しました。
+            </div>
             <header class="header">
                 <div class="header-title-area">
                     <h1>予約状況タイムライン</h1>
@@ -125,7 +148,22 @@
                                     th:data-counselor-name="${timeline.counselorName}"
                                     th:data-counselor-id="${timeline.counselorId}"
                                     class="slot-cell slot-available"
-                                ></td>
+                                    onclick="handleRegisterUnavailable(event)"
+                                >
+                                    <!-- unavailable登録のための不可視のform -->
+                                    <form
+                                        th:action="@{/counselor/unavailable/register}"
+                                        method="POST"
+                                        class="unavailable-register"
+                                    >
+                                        <input
+                                            class="date"
+                                            type="hidden"
+                                            name="dateTimeString"
+                                            readonly
+                                        />
+                                    </form>
+                                </td>
                                 <td
                                     th:if="${slot.status == SlotStatus.Reserved}"
                                     th:data-reservation-id="${slot.reservationId}"
@@ -189,6 +227,6 @@
                     </button>
                 </div>
             </div>
-        </div>>
+        </div>
     </body>
 </html>

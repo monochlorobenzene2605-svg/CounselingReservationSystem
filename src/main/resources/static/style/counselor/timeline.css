@@ -17,6 +17,33 @@ body {
     margin: 0 auto;
 }
 
+/* リダイレクト時メッセージ */
+.success-message,
+.cancel-message,
+.error-message {
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+/* 成功・解除メッセージ */
+.success-message,
+.cancel-message {
+    background-color: #dcfce7;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+}
+
+/* エラーメッセージ */
+.error-message {
+    background-color: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+}
+
 /* ヘッダー */
 .header {
     display: flex;
