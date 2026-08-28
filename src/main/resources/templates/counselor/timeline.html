@@ -177,8 +177,26 @@
                                 ></td>
                                 <td
                                     th:if="${slot.status == SlotStatus.Unavailabled}"
+                                    th:data-datetime="${#temporals.format(slot.startTime, 'yyyy/MM/dd HH:mm')}"
+                                    th:data-counselor-name="${timeline.counselorName}"
+                                    th:data-counselor-id="${timeline.counselorId}"
                                     class="slot-cell slot-unavailable"
-                                ></td>
+                                    onclick="handleCancelUnavailable(event)"
+                                >
+                                    <!-- unavailableキャンセルのための不可視のform -->
+                                    <form
+                                        th:action="@{/counselor/unavailable/cancel}"
+                                        method="POST"
+                                        class="unavailable-cancel"
+                                    >
+                                        <input
+                                            class="date"
+                                            type="hidden"
+                                            name="dateTimeString"
+                                            readonly
+                                        />
+                                    </form>
+ </td>
                             </span>
                         </tr>
                     </tbody>

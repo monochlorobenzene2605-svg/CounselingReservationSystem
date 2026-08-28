@@ -17,6 +17,7 @@ import lombok.AccessLevel;
 public class SlotTemplate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
     private Integer id;
 
     // 値が変更されることはないので、setterは作らない

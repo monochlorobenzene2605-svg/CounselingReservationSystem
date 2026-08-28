@@ -31,6 +31,7 @@ import lombok.Setter;
 public class UnavailableSlot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)

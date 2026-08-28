@@ -56,7 +56,7 @@ public class CounselorTimelineController {
 
         String userId = auth.getName();
         Optional<User> user = userRepository.findByUserId(userId);
-        String userName = user.map(User::getName).orElse("Unknown Name");
+        String userName = user.map(User::getName).orElseThrow();
         model.addAttribute("userId", userId);
         model.addAttribute("userName", userName);
         model.addAttribute("date", date);
@@ -77,10 +77,8 @@ public class CounselorTimelineController {
         LocalDateTime ldt = LocalDateTime.parse(dateTimeString);
         LocalDate date = ldt.toLocalDate();
         LocalTime time = ldt.toLocalTime();
+        User counselor = getUserByAuth(auth);
 
-        String userId = auth.getName();
-        User counselor = userRepository.findByUserId(userId).orElseThrow();
-        
         boolean isSuccess = reservationService.registerUnavailable(counselor, date, time);
         String status = isSuccess ? "unavailableRegistered" : "error";
 
@@ -94,12 +92,14 @@ public class CounselorTimelineController {
 
     @PostMapping("/counselor/unavailable/cancel")
     public String cancelUnavailable(@RequestParam String dateTimeString,
+            Authentication auth,
             @RequestHeader(value = "Referer", required = true) String referer) {
         LocalDateTime ldt = LocalDateTime.parse(dateTimeString);
         LocalDate date = ldt.toLocalDate();
         LocalTime time = ldt.toLocalTime();
+        User counselor = getUserByAuth(auth);
 
-        boolean isSuccess = reservationService.cancelUnavailable(date, time);
+        boolean isSuccess = reservationService.cancelUnavailable(counselor, date, time);
         String status = isSuccess ? "unavailableCanceled" : "error";
 
         String redirectUrl = UriComponentsBuilder
@@ -108,5 +108,11 @@ public class CounselorTimelineController {
                 .build()
                 .toUriString();
         return "redirect:" + redirectUrl;
+    }
+
+    private User getUserByAuth(Authentication auth) {
+        String userId = auth.getName();
+        User user = userRepository.findByUserId(userId).orElseThrow();
+        return user;
     }
 }

@@ -73,7 +73,15 @@ public class ReservationService {
         return true;
     }
 
-    public boolean cancelUnavailable(LocalDate date, LocalTime time) {
-        return true;
+    public boolean cancelUnavailable(User counselor, LocalDate date, LocalTime time) {
+        SlotTemplate slotTemplate = slotTemplateRepository.findByStartTime(time).orElseThrow();
+        try {
+            UnavailableSlot cancelTarget = unavailableSlotRepository.findByCounselorAndDateAndSlotTemplate(counselor, date, slotTemplate);
+            unavailableSlotRepository.deleteById(cancelTarget.getId());
+        } catch (Exception e) {
+            return false;
+        }
+
+       return true;
     }
 }

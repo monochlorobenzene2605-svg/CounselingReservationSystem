@@ -12,4 +12,5 @@ import com.example.demo.entity.User;
 public interface UnavailableSlotRepository extends JpaRepository<UnavailableSlot, Integer> {
     List<UnavailableSlot> findByCounselorAndDate(User counselor, LocalDate date);
     boolean existsByCounselorAndDateAndSlotTemplate(User counselor, LocalDate date, SlotTemplate slot);
+    UnavailableSlot findByCounselorAndDateAndSlotTemplate(User counselor, LocalDate date, SlotTemplate slot);
 }

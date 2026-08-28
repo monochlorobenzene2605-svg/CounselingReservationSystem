@@ -15,8 +15,18 @@ function closeReservationModal() {
 function handleRegisterUnavailable(ev) {
     const dataset = ev.currentTarget.dataset;
     const date = dataset.datetime;
-    if(confirm("予約不可として登録しますか？")){
+    if(confirm("面談不可として登録しますか？")){
         const form = ev.currentTarget.querySelector(".unavailable-register");
+        form.querySelector("input.date").value = date.replace(/\//g, "-").replace(" ", "T"); // "yyyy/mm/dd hh:mm" → "yyyy-mm-ddThh:mm"に変換
+        form.submit();
+    }
+}
+
+ function handleCancelUnavailable(ev) {
+    const dataset = ev.currentTarget.dataset;
+    const date = dataset.datetime;
+    if(confirm("面談不可登録を解除しますか？")){
+        const form = ev.currentTarget.querySelector(".unavailable-cancel");
         form.querySelector("input.date").value = date.replace(/\//g, "-").replace(" ", "T"); // "yyyy/mm/dd hh:mm" → "yyyy-mm-ddThh:mm"に変換
         form.submit();
     }
