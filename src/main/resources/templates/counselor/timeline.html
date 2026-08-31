@@ -70,6 +70,7 @@
                                 id="date-picker"
                                 name="dateString"
                                 th:value="${date}"
+                                onchange="this.form.submit()"
                             />
                             <script>
                                 // 今日～1か月後までの範囲しか選択できないようにする
