@@ -170,7 +170,7 @@
                                     th:data-reservation-id="${slot.reservationId}"
                                     th:data-datetime="${#temporals.format(slot.startTime, 'yyyy/MM/dd HH:mm')}"
                                     th:data-counselor-name="${timeline.counselorName}"
-                                    th:data-student-name="${userName}"
+                                    th:data-student-name="${slot.studentName}"
                                     th:data-summary="${slot.summary}"
                                     th:data-detail="${slot.detail}"
                                     class="slot-cell slot-reserved"

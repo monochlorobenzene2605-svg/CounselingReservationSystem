@@ -136,6 +136,7 @@ public class ScheduleService {
         slot.setDetail(reservation.getDetail());
         slot.setReservationId(reservation.getId());
         slot.setCounselorName(reservation.getCounselor().getName());
+        slot.setStudentName(reservation.getStudent().getName());
         return slot;
     }
 

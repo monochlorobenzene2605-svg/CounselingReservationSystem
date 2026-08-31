@@ -12,6 +12,7 @@ public class SlotDto {
     public enum Status {
         Empty, Reserved, Mine, Unavailabled
     }
+    private String studentName;
     private Status status = Status.Empty;
     private String summary = "summary";
     private String detail = "detail";
