@@ -118,6 +118,10 @@ public class ScheduleService {
     public List<SlotDto> createReservationSlots(User student) {
         List<SlotDto> slots = new ArrayList<>();
         List<Reservation> reservations = reservationRepository.findByStudent(student);
+        // 今日以前のものは消す
+        reservations = reservations.stream()
+                .filter(r -> !r.getDate().isBefore(LocalDate.now()))
+                .toList();
         for (Reservation r : reservations) {
             slots.add(createReservationSlot(r));
         }
