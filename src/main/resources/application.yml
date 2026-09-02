@@ -19,7 +19,15 @@ spring:
       mode: always
       data-locations: 
         - classpath:/sql/users.sql
-        - classpath:/sql/slot_templates.sql
+        - classpath:/sql/slot_templates.sql  
+        
+server:
+  port: 8443
+  ssl:
+    key-store: classpath:keystore.p12
+    key-store-password: password # TODO: パスワードやkeystoreの扱いについて
+    key-store-type: PKCS12
+    key-alias: tomcat
 
 # デバッグ用 TODO:リリース時に消す
 logging:
