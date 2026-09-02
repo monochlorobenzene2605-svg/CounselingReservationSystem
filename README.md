@@ -38,11 +38,13 @@ MariaDBを起動してください。
 keytool -genkeypair \
   -alias tomcat \
   -keyalg RSA \
+  -keysize 2048 \
   -storetype PKCS12 \
   -keystore keystore.p12 \
+  -storepass password \
+  -validity 3650 \
   -ext SAN=IP:{アプリを実行するサーバーのIPアドレス},DNS:localhost
 ```
-パスワードは"password"と登録してください。<br>
 証明書を信頼済みとして登録していない環境からアクセスした場合、ブラウザにセキュリティ警告が表示される場合があります。<br>
 必要に応じて生成した証明書をクライアントPCへ登録してください。<br>
 
