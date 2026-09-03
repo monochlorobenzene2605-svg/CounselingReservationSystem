@@ -31,8 +31,8 @@ public class ReserveController {
     private ReservationService reservationService;
 
     @PostMapping("/reserve")
-    public String reserve(@RequestParam String counselorId, @RequestParam String dateTime, @RequestParam String summary,
-            @RequestParam String detail) {
+    public String reserve(@RequestParam String counselorId, @RequestParam String dateTime, @RequestParam String summary, @RequestParam String detail,
+            @RequestHeader(value = "Referer", required = true) String referer) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String loginUserId = auth.getName();
         User student = userRepository.findByUserId(loginUserId).orElseThrow();
@@ -53,9 +53,21 @@ public class ReserveController {
         try {
             reservationService.reserve(student, counselor, date, slot, summary, detail);
         } catch (DataIntegrityViolationException e) { // すでに同じ時間の別な相談員に予約している場合
-            return ("redirect:/student/timeline?date=" + today + "&status=alreadyReserved");
+            String status = "alreadyReserved";
+            String redirectUrl = UriComponentsBuilder
+                .fromUriString(referer)
+                .replaceQueryParam("status", status)
+                .build()
+                .toUriString();
+            return ("redirect:" + redirectUrl);
         }
-        return ("redirect:/student/timeline?date=" + today + "&status=reserved");
+        String status = "reserved";
+        String redirectUrl = UriComponentsBuilder
+            .fromUriString(referer)
+            .replaceQueryParam("status", status)
+            .build()
+            .toUriString();
+        return ("redirect:" + redirectUrl);
     }
 
     @PostMapping("/reserve/cancel")
@@ -70,7 +82,7 @@ public class ReserveController {
 
         String redirectUrl = UriComponentsBuilder
                 .fromUriString(referer)
-                .queryParam("status", status)
+                .replaceQueryParam("status", status)
                 .build()
                 .toUriString();
 
