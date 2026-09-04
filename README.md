@@ -184,10 +184,10 @@ flowchart LR
 
     DTO --> T["Thymeleaf<br/>タイムライン画面"]
 
-    classDef table fill:#E3F2FD,stroke:#1565C0,stroke-width:2px;
-    classDef service fill:#FFF3E0,stroke:#EF6C00,stroke-width:2px;
-    classDef dto fill:#E8F5E9,stroke:#2E7D32,stroke-width:2px;
-    classDef view fill:#F3E5F5,stroke:#6A1B9A,stroke-width:2px;
+    classDef table fill:#E3F2FD,color:#111,stroke:#1565C0,stroke-width:2px;
+    classDef service fill:#FFF3E0,color:#111,stroke:#EF6C00,stroke-width:2px;
+    classDef dto fill:#E8F5E9,color:#111,stroke:#2E7D32,stroke-width:2px;
+    classDef view fill:#F3E5F5,color:#111,stroke:#6A1B9A,stroke-width:2px;
 
     class R,U,S table;
     class SS service;
