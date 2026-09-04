@@ -24,48 +24,6 @@
 
 ---
 
-## 起動方法
-
-### 1. MariaDBを起動
-MariaDBを起動してください。
-接続情報は以下を想定しています。
-
-- User: root
-- Password: password
-
-アプリケーション起動時に
-counseling-reservation-system-db が存在しない場合は
-自動的に作成されます。
-
-### 2. HTTPS証明書を配置
-
-証明書を生成し、src/main/resources 配下へ配置してください。
-```bash
-keytool -genkeypair \
-  -alias tomcat \
-  -keyalg RSA \
-  -keysize 2048 \
-  -storetype PKCS12 \
-  -keystore keystore.p12 \
-  -storepass password \
-  -validity 3650 \
-  -ext SAN=IP:{アプリを実行するサーバーのIPアドレス}
-```
-証明書を信頼済みとして登録していない環境からアクセスした場合、ブラウザにセキュリティ警告が表示される場合があります。<br>
-必要に応じて生成した証明書をクライアントPCへ登録してください。<br>
-
-### 3. Spring Boot起動
-
-```bash
-mvnw spring-boot:run
-```
-### 4. アクセス
-同一ネットワーク内のクライアントPCから、
-```
-https://サーバーIPアドレス:8443
-```
-でアクセスできます。
-
 ## 主な機能
 
 ### ログイン
@@ -209,6 +167,47 @@ flowchart LR
     * DB接続情報や証明書パスワードなどを環境変数から取得するよう改善したいと考えています。
 * 管理者画面の実装
     * 新規ユーザーの登録は、resources/sql/user.sqlを編集しアプリを再起動するか、DBに直接登録する形になっていますが、これらの作業を行える管理者用の画面を実装したいと考えています。
+## 起動方法
+
+### 1. MariaDBを起動
+MariaDBを起動してください。
+接続情報は以下を想定しています。
+
+- User: root
+- Password: password
+
+アプリケーション起動時に
+counseling-reservation-system-db が存在しない場合は
+自動的に作成されます。
+
+### 2. HTTPS証明書を配置
+
+証明書を生成し、src/main/resources 配下へ配置してください。
+```bash
+keytool -genkeypair \
+  -alias tomcat \
+  -keyalg RSA \
+  -keysize 2048 \
+  -storetype PKCS12 \
+  -keystore keystore.p12 \
+  -storepass password \
+  -validity 3650 \
+  -ext SAN=IP:{アプリを実行するサーバーのIPアドレス}
+```
+証明書を信頼済みとして登録していない環境からアクセスした場合、ブラウザにセキュリティ警告が表示される場合があります。<br>
+必要に応じて生成した証明書をクライアントPCへ登録してください。<br>
+
+### 3. Spring Boot起動
+
+```bash
+mvnw spring-boot:run
+```
+### 4. アクセス
+同一ネットワーク内のクライアントPCから、
+```
+https://サーバーIPアドレス:8443
+```
+でアクセスできます。
 
 ## システム仕様
 
