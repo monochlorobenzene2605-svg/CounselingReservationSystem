@@ -32,6 +32,11 @@ MariaDBを起動してください。
 
 - User: root
 - Password: password
+
+アプリケーション起動時に
+counseling-reservation-system-db が存在しない場合は
+自動的に作成されます。
+
 ### 2. HTTPS証明書を配置
 
 証明書を生成し、src/main/resources 配下へ配置してください。
@@ -52,7 +57,7 @@ keytool -genkeypair \
 ### 3. Spring Boot起動
 
 ```bash
-mvn spring-boot:run
+mvnw spring-boot:run
 ```
 ### 4. アクセス
 同一ネットワーク内のクライアントPCから、
@@ -161,6 +166,34 @@ https://サーバーIPアドレス:8443
 - 表示ロジックをサービス層へ集約できる
 
 というメリットが得られました。
+
+```mermaid
+flowchart LR
+
+    R["reservation<br/>予約情報"]
+    U["unavailable_slot<br/>面談不可情報"]
+    S["slot_template<br/>時間帯マスタ"]
+
+    R --> SS
+    U --> SS
+    S --> SS
+
+    SS["ScheduleService<br/>データ集約・変換"]
+
+    SS --> DTO["TimelineDto<br/>表示用データ"]
+
+    DTO --> T["Thymeleaf<br/>タイムライン画面"]
+
+    classDef table fill:#E3F2FD,stroke:#1565C0,stroke-width:2px;
+    classDef service fill:#FFF3E0,stroke:#EF6C00,stroke-width:2px;
+    classDef dto fill:#E8F5E9,stroke:#2E7D32,stroke-width:2px;
+    classDef view fill:#F3E5F5,stroke:#6A1B9A,stroke-width:2px;
+
+    class R,U,S table;
+    class SS service;
+    class DTO dto;
+    class T view;
+```
 
 
 ## 苦労した点
